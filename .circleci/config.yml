@@ -4,14 +4,17 @@ machine:
 test:
   override:
     - nosetests test/math-test.py
-- run:
-   name: no cuck
-    command: |
-    case "${CIRCLE_BRANCH}" in
-    "develop")
-    pip install -r requierements.txt
-    ;;
-    *)
-    echo "no chuck to build"
-    ;;
-    esac
+jobs:
+  build:
+    steps:
+      - run:
+        name: no cuck
+        command: |
+        case "${CIRCLE_BRANCH}" in
+        "develop")
+        pip install -r requierements.txt
+        ;;
+        *)
+        echo "no chuck to build"
+        ;;
+        esac
