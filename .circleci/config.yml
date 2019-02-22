@@ -1,16 +1,13 @@
 version: 2
-machine:
-  python:
-    version: 3.5.2
-test:
-  override:
-    - nosetests test/math-test.py
 jobs:
   build:
-    steps:
-      - run:
-         name: no cuck
-         command: |
+   machine:
+    python:
+     version: 3.5.2
+  steps:
+   - run:
+       name: no cuck
+       command: |
           case "${CIRCLE_BRANCH}" in
           "develop")
           pip install -r requierements.txt
