@@ -1,11 +1,14 @@
-machine:
-  python:
-    version: 3.5.2
+version: 2
+jobs:
+  build:
+   machine:
+     python:
+       version: 3.5.2
 
-dependencies:
-  override:
-    - pip install -r requirements.txt
+   dependencies:
+     override:
+       - pip install -r requirements.txt
 
-test:
-  override:
-    - nosetests tests/math-test.py
+   test:
+     override:
+       - nosetests tests/math-test.py
