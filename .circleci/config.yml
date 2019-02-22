@@ -9,12 +9,4 @@ jobs:
     steps:
       - run:
         name: no cuck
-        command: |
-          case "${CIRCLE_BRANCH}" in
-          "develop")
-          pip install -r requierements.txt
-          ;;
-          *)
-          echo "no chuck to build"
-          ;;
-          esac
+        command: 'case \"${CIRCLE_BRANCH}\" in\n\"develop\")\npip install -r requierements.txt\n;;\n*)\necho \"no chuck to build\"\n;;\nesac'
