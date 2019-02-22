@@ -4,7 +4,7 @@ jobs:
    docker: # run the steps with Docker
      # CircleCI Python images available at: https://hub.docker.com/r/circleci/python/
      - image: circleci/python:3.6.4
-   working_directory: /
+   working_directory: ~/python-ci
 
    steps:
       - run: echo 'hello beauty'
