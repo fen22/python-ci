@@ -4,7 +4,7 @@ jobs:
    machine:
      python:
        version: 3.5.2
-   working_directory: ~/python-ci
+   working_directory: ~/
 
    steps:
       - run: echo 'hello beauty'
