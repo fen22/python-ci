@@ -4,13 +4,14 @@ jobs:
    machine:
      python:
        version: 3.5.2
+   working_directory: ~/python-ci
 
    steps:
       - run: echo 'hello beauty'
       - run: ls
       - run: pwd
-      - run: python --version
-      - run: pip install -r requirements.txt
+      - run: python3 --version
+      - run: pip3 install -r requirements.txt
       - run: nosetests test/math-test.py
    dependencies:
      override:
