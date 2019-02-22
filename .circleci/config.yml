@@ -7,8 +7,9 @@ jobs:
    working_directory: ~/python-ci
 
    steps:
+      - checkout
       - run: ls
-      - run: sudo find / -path ./proc -prune -o -name 'requirements.txt'
+      - run: pwd
       - run: python3 --version
       - run: pip3 install -r requirements.txt
       - run: nosetests test/math-test.py
