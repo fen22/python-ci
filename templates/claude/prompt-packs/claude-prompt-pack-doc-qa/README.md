@@ -53,7 +53,7 @@ documentation = Path("src/fixtures/sample-doc.md").read_text()
 question = "What is the maximum per_page value for listing resources?"
 
 response = client.messages.create(
-    model="claude-3-5-sonnet-20241022",
+    model="claude-sonnet-4-6",
     max_tokens=1024,
     system=system_prompt,
     messages=[
@@ -78,7 +78,7 @@ const systemPrompt = readFileSync("src/system-prompt.md", "utf-8");
 const documentation = readFileSync("src/fixtures/sample-doc.md", "utf-8");
 
 const response = await client.messages.create({
-  model: "claude-3-5-sonnet-20241022",
+  model: "claude-sonnet-4-6",
   max_tokens: 1024,
   system: systemPrompt,
   messages: [

@@ -33,7 +33,7 @@ Manual Trigger | Weekly Schedule (lunes 8am)
 | `AWS_ACCESS_KEY_ID` | AWS Access Key (solo modo aws) | — | Solo aws |
 | `AWS_SECRET_ACCESS_KEY` | AWS Secret Key (solo modo aws) | — | Solo aws |
 | `CSV_FIXTURE_URL` | URL del CSV de costos | URL del repo | No |
-| `LLM_MODEL` | Modelo LLM | `claude-3-5-sonnet-20241022` | No |
+| `LLM_MODEL` | Modelo LLM | `claude-sonnet-4-6` | No |
 | `LLM_API_URL` | URL del LLM | Anthropic API | No |
 
 ## Setup rápido (modo CSV fixture)

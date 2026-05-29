@@ -76,10 +76,10 @@ if (-not (Test-Command "git")) {
 
 # ---------- Python ----------
 if (-not (Test-Command "python")) {
-    if (Confirm-Install "Python 3.11+") {
-        Write-Info "Instalando Python 3.11..."
+    if (Confirm-Install "Python 3.12+") {
+        Write-Info "Instalando Python 3.12..."
         if (Test-Command "winget") {
-            winget install --id Python.Python.3.11 -e --source winget --silent --accept-package-agreements --accept-source-agreements
+            winget install --id Python.Python.3.12 -e --source winget --silent --accept-package-agreements --accept-source-agreements
             $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
         } else {
             Write-Warn "winget no disponible. Descarga Python desde: https://www.python.org/downloads/"

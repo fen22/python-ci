@@ -113,7 +113,7 @@
         "sendBody": true,
         "contentType": "json",
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({ model: $env.LLM_MODEL || 'claude-3-5-sonnet-20241022', max_tokens: 1024, system: 'You are an engineering documentation assistant for ClickIT. Be concise, accurate, and always cite specific sections or page numbers when possible.', messages: $('Build Prompt').first().json.messages }) }}",
+        "jsonBody": "={{ JSON.stringify({ model: $env.LLM_MODEL || 'claude-sonnet-4-6', max_tokens: 1024, system: 'You are an engineering documentation assistant for ClickIT. Be concise, accurate, and always cite specific sections or page numbers when possible.', messages: $('Build Prompt').first().json.messages }) }}",
         "options": {
           "timeout": 60000
         }

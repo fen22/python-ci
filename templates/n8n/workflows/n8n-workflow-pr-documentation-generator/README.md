@@ -31,7 +31,7 @@ GitHub PR Event (opened / synchronize)
 |---|---|---|
 | `GITHUB_TOKEN` | Personal Access Token de GitHub con permiso `repo` | Sí |
 | `LLM_API_KEY` | API key del LLM | Sí |
-| `LLM_MODEL` | Modelo LLM (default: `claude-3-5-sonnet-20241022`) | No |
+| `LLM_MODEL` | Modelo LLM (default: `claude-sonnet-4-6`) | No |
 | `LLM_API_URL` | URL del LLM (default: Anthropic) | No |
 
 ## Setup paso a paso

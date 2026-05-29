@@ -88,7 +88,7 @@ En el UI de Langflow, hacer clic en cada nodo y completar:
 |---|---|---|
 | Embeddings | OpenAI text-embedding-3-small | AnthropicEmbeddings, OllamaEmbeddings, HuggingFaceEmbeddings |
 | Vector Store | Chroma (local) | FAISS, Pinecone, Weaviate, AstraDB |
-| LLM | Claude claude-3-5-sonnet | ChatOpenAI, ChatOllama, ChatGroq |
+| LLM | Claude claude-sonnet-4-6 | ChatOpenAI, ChatOllama, ChatGroq |
 | Document Loader | File | URLLoader, NotionLoader, GitLoader |
 
 ## Limitaciones conocidas

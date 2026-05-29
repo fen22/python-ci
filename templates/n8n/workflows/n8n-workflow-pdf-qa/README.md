@@ -17,7 +17,7 @@ Ejecución manual (indexar)          Chat Trigger (preguntar)
 ## Dependencias
 
 - **Pinecone**: cuenta en pinecone.io (hay tier gratuito)
-- **OpenAI API**: para embeddings (`text-embedding-ada-002`) y chat (`gpt-4o`)
+- **OpenAI API**: para embeddings (`text-embedding-3-small`) y chat (`gpt-4o`)
 - **Google Drive**: con API habilitada en Google Cloud Console
 
 ## Variables
@@ -33,7 +33,7 @@ Ejecución manual (indexar)          Chat Trigger (preguntar)
 
 1. Importar `src/workflow.json` en n8n
 2. Configurar credenciales de Google Drive y OpenAI en n8n
-3. Crear un índice en Pinecone (dimensión 1536 para `text-embedding-ada-002`)
+3. Crear un índice en Pinecone (dimensión 1536 para `text-embedding-3-small` (también compatible con modelos anteriores))
 4. Ejecutar el sub-workflow de indexación con tu PDF
 5. Usar el Chat Trigger para hacer preguntas
 

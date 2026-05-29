@@ -34,7 +34,7 @@ Copia `.env.example` como `.env` y completa los valores:
 | `SLACK_BOT_TOKEN` | Token del Bot de Slack (xoxb-...) | Sí |
 | `LLM_API_KEY` | API key del LLM (Anthropic, OpenAI, etc.) | Sí |
 | `DOCS_SOURCE_URL` | URL del endpoint de documentación (GET → texto) | Sí |
-| `LLM_MODEL` | Modelo a usar (default: `claude-3-5-sonnet-20241022`) | No |
+| `LLM_MODEL` | Modelo a usar (default: `claude-sonnet-4-6`) | No |
 | `LLM_API_URL` | URL base del LLM (default: API de Anthropic) | No |
 
 ## Setup paso a paso
@@ -73,7 +73,7 @@ La variable `DOCS_SOURCE_URL` debe apuntar a un endpoint que devuelva texto o JS
 # En tu docker-compose.yml o .env de n8n:
 N8N_ENV_LLM_API_KEY=sk-ant-...
 N8N_ENV_LLM_API_URL=https://api.anthropic.com/v1/messages
-N8N_ENV_LLM_MODEL=claude-3-5-sonnet-20241022
+N8N_ENV_LLM_MODEL=claude-sonnet-4-6
 N8N_ENV_DOCS_SOURCE_URL=https://raw.githubusercontent.com/tu-org/docs/main/README.md
 ```
 

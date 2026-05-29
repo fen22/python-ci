@@ -80,8 +80,8 @@ fi
 
 # ---------- Python ----------
 if ! check_command python3; then
-    if confirm "Python 3.11+ (lenguaje para scripts y LLM apps)"; then
-        brew install python@3.11
+    if confirm "Python 3.12+ (lenguaje para scripts y LLM apps)"; then
+        brew install python@3.12
         success "Python instalado: $(version_of python3)"
     fi
 else
@@ -91,8 +91,8 @@ fi
 # ---------- Node.js ----------
 if ! check_command node; then
     if confirm "Node.js LTS (requerido para n8n, Claude Code y MCP servers)"; then
-        brew install node@20
-        brew link node@20 --force --overwrite 2>/dev/null || true
+        brew install node@22
+        brew link node@22 --force --overwrite 2>/dev/null || true
         success "Node.js instalado: $(version_of node)"
     fi
 else
