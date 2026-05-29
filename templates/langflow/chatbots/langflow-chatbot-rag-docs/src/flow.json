@@ -1,1 +1,310 @@
-{"name":"RAG Docs Chatbot","data":{}}
+{
+  "_schema_note": "Langflow flow blueprint — compatible con Langflow 1.x. Importar via UI: Load Flow. Puede requerir ajustes menores por versión.",
+  "_status": "draft",
+  "id": "rag-docs-chatbot-flow",
+  "name": "RAG Docs Chatbot",
+  "description": "Chatbot con RAG (Retrieval-Augmented Generation) para responder preguntas sobre documentación técnica interna.",
+  "data": {
+    "nodes": [
+      {
+        "id": "ChatInput-node",
+        "type": "ChatInput",
+        "position": { "x": 100, "y": 300 },
+        "data": {
+          "type": "ChatInput",
+          "id": "ChatInput-node",
+          "display_name": "Chat Input",
+          "description": "Receives the user question",
+          "template": {
+            "input_value": {
+              "field_type": "str",
+              "required": false,
+              "placeholder": "Ask a question about the documentation...",
+              "value": ""
+            },
+            "should_store_message": {
+              "field_type": "bool",
+              "value": true
+            },
+            "sender": {
+              "field_type": "str",
+              "value": "User",
+              "options": ["Machine", "User"]
+            },
+            "session_id": {
+              "field_type": "str",
+              "value": ""
+            }
+          },
+          "base_classes": ["Message"]
+        }
+      },
+      {
+        "id": "FileLoader-node",
+        "type": "File",
+        "position": { "x": 100, "y": 100 },
+        "data": {
+          "type": "File",
+          "id": "FileLoader-node",
+          "display_name": "Document Loader",
+          "description": "Load documentation files (PDF, TXT, MD). Replace with URL loader or Notion/GitHub loader as needed.",
+          "template": {
+            "path": {
+              "field_type": "file",
+              "value": "",
+              "file_types": [".txt", ".md", ".pdf"],
+              "_note": "Upload your documentation file here, or replace this node with URLLoader/NotionLoader"
+            }
+          },
+          "base_classes": ["Data"]
+        }
+      },
+      {
+        "id": "SplitText-node",
+        "type": "SplitText",
+        "position": { "x": 350, "y": 100 },
+        "data": {
+          "type": "SplitText",
+          "id": "SplitText-node",
+          "display_name": "Text Splitter",
+          "description": "Splits documents into chunks for embedding",
+          "template": {
+            "chunk_size": {
+              "field_type": "int",
+              "value": 1000,
+              "_note": "Characters per chunk. Adjust based on your LLM context window."
+            },
+            "chunk_overlap": {
+              "field_type": "int",
+              "value": 200
+            },
+            "separator": {
+              "field_type": "str",
+              "value": "\n\n"
+            }
+          },
+          "base_classes": ["Data"]
+        }
+      },
+      {
+        "id": "OpenAIEmbeddings-node",
+        "type": "OpenAIEmbeddings",
+        "position": { "x": 600, "y": 50 },
+        "data": {
+          "type": "OpenAIEmbeddings",
+          "id": "OpenAIEmbeddings-node",
+          "display_name": "Embeddings",
+          "description": "Generate vector embeddings. Replace with AnthropicEmbeddings or OllamaEmbeddings if needed.",
+          "template": {
+            "openai_api_key": {
+              "field_type": "str",
+              "password": true,
+              "value": "",
+              "_env_var": "OPENAI_API_KEY",
+              "_note": "Or use AnthropicEmbeddings with ANTHROPIC_API_KEY. Ollama for local embeddings."
+            },
+            "model": {
+              "field_type": "str",
+              "value": "text-embedding-3-small",
+              "_alternatives": ["text-embedding-ada-002", "text-embedding-3-large"]
+            }
+          },
+          "base_classes": ["Embeddings"]
+        }
+      },
+      {
+        "id": "Chroma-node",
+        "type": "Chroma",
+        "position": { "x": 850, "y": 100 },
+        "data": {
+          "type": "Chroma",
+          "id": "Chroma-node",
+          "display_name": "Vector Store (Chroma)",
+          "description": "In-memory vector store. Replace with FAISS for persistent local storage or Pinecone/Weaviate for cloud.",
+          "template": {
+            "collection_name": {
+              "field_type": "str",
+              "value": "docs-collection"
+            },
+            "persist_directory": {
+              "field_type": "str",
+              "value": "./chroma_db",
+              "_note": "Leave empty for in-memory. Set path for persistent storage."
+            }
+          },
+          "base_classes": ["VectorStore", "Retriever"]
+        }
+      },
+      {
+        "id": "AnthropicLLM-node",
+        "type": "ChatAnthropic",
+        "position": { "x": 600, "y": 350 },
+        "data": {
+          "type": "ChatAnthropic",
+          "id": "AnthropicLLM-node",
+          "display_name": "Claude LLM",
+          "description": "Anthropic Claude for answer generation. Replace with ChatOpenAI, ChatOllama, etc.",
+          "template": {
+            "anthropic_api_key": {
+              "field_type": "str",
+              "password": true,
+              "value": "",
+              "_env_var": "LLM_API_KEY"
+            },
+            "model_name": {
+              "field_type": "str",
+              "value": "claude-3-5-sonnet-20241022",
+              "options": ["claude-3-5-sonnet-20241022", "claude-3-haiku-20240307", "claude-3-opus-20240229"]
+            },
+            "max_tokens": {
+              "field_type": "int",
+              "value": 1024
+            },
+            "temperature": {
+              "field_type": "float",
+              "value": 0.1,
+              "_note": "Low temperature for factual Q&A"
+            }
+          },
+          "base_classes": ["LanguageModel"]
+        }
+      },
+      {
+        "id": "Prompt-node",
+        "type": "PromptTemplate",
+        "position": { "x": 350, "y": 350 },
+        "data": {
+          "type": "PromptTemplate",
+          "id": "Prompt-node",
+          "display_name": "RAG Prompt",
+          "description": "Prompt template for RAG Q&A",
+          "template": {
+            "template": {
+              "field_type": "str",
+              "value": "You are a technical documentation assistant. Answer the question based ONLY on the following context.\n\nIf the context does not contain the answer, say: \"I couldn't find this information in the documentation.\"\n\nContext:\n{context}\n\nQuestion: {question}\n\nAnswer (be concise and cite relevant sections):"
+            },
+            "input_variables": {
+              "field_type": "list",
+              "value": ["context", "question"]
+            }
+          },
+          "base_classes": ["Prompt"]
+        }
+      },
+      {
+        "id": "RetrievalQA-node",
+        "type": "RetrievalQA",
+        "position": { "x": 850, "y": 350 },
+        "data": {
+          "type": "RetrievalQA",
+          "id": "RetrievalQA-node",
+          "display_name": "RAG Chain",
+          "description": "Combines retriever + LLM for Q&A",
+          "template": {
+            "chain_type": {
+              "field_type": "str",
+              "value": "stuff",
+              "options": ["stuff", "map_reduce", "refine"]
+            },
+            "return_source_documents": {
+              "field_type": "bool",
+              "value": true
+            },
+            "k": {
+              "field_type": "int",
+              "value": 4,
+              "_note": "Number of documents to retrieve"
+            }
+          },
+          "base_classes": ["Chain"]
+        }
+      },
+      {
+        "id": "ChatOutput-node",
+        "type": "ChatOutput",
+        "position": { "x": 1100, "y": 350 },
+        "data": {
+          "type": "ChatOutput",
+          "id": "ChatOutput-node",
+          "display_name": "Chat Output",
+          "description": "Returns the answer to the user",
+          "template": {
+            "sender": {
+              "field_type": "str",
+              "value": "Machine"
+            },
+            "data_template": {
+              "field_type": "str",
+              "value": "{text}"
+            }
+          },
+          "base_classes": ["Message"]
+        }
+      }
+    ],
+    "edges": [
+      {
+        "id": "edge-file-split",
+        "source": "FileLoader-node",
+        "target": "SplitText-node",
+        "sourceHandle": "FileLoader-node-Data",
+        "targetHandle": "SplitText-node-data_inputs"
+      },
+      {
+        "id": "edge-split-embed",
+        "source": "SplitText-node",
+        "target": "Chroma-node",
+        "sourceHandle": "SplitText-node-Data",
+        "targetHandle": "Chroma-node-documents"
+      },
+      {
+        "id": "edge-embed-chroma",
+        "source": "OpenAIEmbeddings-node",
+        "target": "Chroma-node",
+        "sourceHandle": "OpenAIEmbeddings-node-Embeddings",
+        "targetHandle": "Chroma-node-embedding"
+      },
+      {
+        "id": "edge-chroma-qa",
+        "source": "Chroma-node",
+        "target": "RetrievalQA-node",
+        "sourceHandle": "Chroma-node-Retriever",
+        "targetHandle": "RetrievalQA-node-retriever"
+      },
+      {
+        "id": "edge-llm-qa",
+        "source": "AnthropicLLM-node",
+        "target": "RetrievalQA-node",
+        "sourceHandle": "AnthropicLLM-node-LanguageModel",
+        "targetHandle": "RetrievalQA-node-llm"
+      },
+      {
+        "id": "edge-prompt-qa",
+        "source": "Prompt-node",
+        "target": "RetrievalQA-node",
+        "sourceHandle": "Prompt-node-Prompt",
+        "targetHandle": "RetrievalQA-node-combine_documents_chain"
+      },
+      {
+        "id": "edge-input-qa",
+        "source": "ChatInput-node",
+        "target": "RetrievalQA-node",
+        "sourceHandle": "ChatInput-node-Message",
+        "targetHandle": "RetrievalQA-node-query"
+      },
+      {
+        "id": "edge-qa-output",
+        "source": "RetrievalQA-node",
+        "target": "ChatOutput-node",
+        "sourceHandle": "RetrievalQA-node-Chain",
+        "targetHandle": "ChatOutput-node-input_value"
+      }
+    ],
+    "viewport": { "x": 0, "y": 0, "zoom": 0.8 }
+  },
+  "is_component": false,
+  "updated_at": "2025-05-29T00:00:00Z",
+  "folder": null,
+  "_compatibility_note": "Tested structurally against Langflow 1.x component API. Node types and handle names may vary between Langflow minor versions. Import and verify node connections after loading.",
+  "_import_instructions": "In Langflow UI: click the folder icon → Load Flow → select this file. Then configure the API keys in the node sidebars."
+}

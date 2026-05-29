@@ -1,29 +1,42 @@
 schema_version: "1.0.0"
 template_id: "tpl.n8n.workflow.cloud-cost-research"
-name: "Cloud Cost Research Workflow"
+name: "n8n Cloud Cost Research Workflow"
 slug: "cloud-cost-research"
 platform: "n8n"
 template_type: "workflow"
 version: "0.1.0"
 status: "draft"
 language: ["es", "en"]
-summary: "Workflow para investigar costos cloud y generar resumen FinOps."
+summary: "Workflow que obtiene costos cloud (AWS Cost Explorer o CSV fixture), genera un resumen ejecutivo FinOps con LLM y envía alertas a Slack si se supera el threshold configurado. Soporta ejecución manual o schedule semanal."
 owner:
   team: "clickit/bench-agentic"
   maintainers: ["@fen22"]
-tags: ["finops", "cloud-cost", "research"]
-integrations: ["AWS", "Slack", "LLM"]
+tags: ["finops", "cloud-cost", "aws", "research", "n8n"]
+integrations: ["AWS Cost Explorer", "Slack", "Anthropic Claude"]
 artifacts:
   entrypoint: "src/workflow.json"
+  readme: "README.md"
+  env_example: ".env.example"
 secrets:
-  required: ["AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY", "LLM_API_KEY"]
-  optional: []
+  required:
+    - LLM_API_KEY
+    - SLACK_WEBHOOK_URL
+  optional:
+    - AWS_ACCESS_KEY_ID
+    - AWS_SECRET_ACCESS_KEY
+    - COST_ALERT_THRESHOLD
+    - COST_DATA_MODE
+    - CSV_FIXTURE_URL
+    - LLM_MODEL
+    - LLM_API_URL
 runtime:
   deployment_models: ["local", "cloud"]
 validation:
   last_tested_at: null
   tested_by: null
+  evidence: []
 security:
   data_classification: "internal"
   pii_expected: false
   credentials_embedded: false
+  least_privilege_reviewed: false

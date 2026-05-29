@@ -15,7 +15,6 @@ for metadata_path in sorted((ROOT / 'templates').glob('**/template.yaml')):
         if not (template_dir / required).exists():
             errors.append(f'{template_dir}: missing {required}')
 if errors:
-    print('
-'.join(errors))
+    print('\n'.join(errors))
     sys.exit(1)
 print('Repository validation passed')

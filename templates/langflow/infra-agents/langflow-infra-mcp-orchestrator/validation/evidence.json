@@ -1,4 +1,7 @@
 {
+  "template_id": "tpl.langflow.infra-agent.infra-mcp-orchestrator",
   "status": "draft",
-  "evidence": []
+  "note": "Blueprint arquitectural. JSON válido con 9 nodos y guardrails. Custom Components no implementados. No probado en Langflow real. MCP nativo en Langflow no confirmado.",
+  "tests_run": [],
+  "last_updated": null
 }

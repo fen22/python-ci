@@ -7,23 +7,29 @@ template_type: "chatbot"
 version: "0.1.0"
 status: "draft"
 language: ["es", "en"]
-summary: "Flow RAG para preguntas sobre documentación técnica."
+summary: "Flow de Langflow para chatbot RAG sobre documentación técnica. Incluye file loader, text splitter, embeddings (OpenAI/Anthropic), vector store Chroma, LLM Claude y cadena RetrievalQA. Importable en Langflow 1.x — verificar compatibilidad de nodos por versión."
 owner:
   team: "clickit/bench-agentic"
   maintainers: ["@fen22"]
-tags: ["rag", "docs", "chatbot"]
-integrations: ["Langflow", "Vector DB", "LLM"]
+tags: ["langflow", "rag", "chatbot", "docs", "chroma", "llm"]
+integrations: ["Langflow", "Chroma", "Anthropic Claude", "OpenAI Embeddings"]
 artifacts:
   entrypoint: "src/flow.json"
+  readme: "README.md"
+  env_example: ".env.example"
 secrets:
-  required: ["LLM_API_KEY"]
-  optional: []
+  required:
+    - LLM_API_KEY
+  optional:
+    - OPENAI_API_KEY
 runtime:
   deployment_models: ["local", "cloud"]
 validation:
   last_tested_at: null
   tested_by: null
+  evidence: []
 security:
   data_classification: "internal"
   pii_expected: false
   credentials_embedded: false
+  least_privilege_reviewed: false

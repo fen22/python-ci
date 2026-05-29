@@ -1,0 +1,33 @@
+schema_version: "1.0.0"
+template_id: "tpl.others.initial-setup.ai-devops-bootstrap"
+name: "AI DevOps Bootstrap (macOS + Windows)"
+slug: "ai-devops-bootstrap"
+platform: "others"
+template_type: "initial-setup"
+version: "0.1.0"
+status: "draft"
+language: ["es", "en"]
+summary: "Scripts de bootstrap para configurar un entorno AI/DevOps en macOS y Windows. Instala Git, Python, Node.js, Docker, AWS CLI, Claude Code y n8n local. Pide confirmación antes de cada instalación. No contiene secretos."
+owner:
+  team: "clickit/bench-agentic"
+  maintainers: ["@fen22"]
+tags: ["bootstrap", "devops", "ai-tools", "macos", "windows", "setup"]
+integrations: ["Homebrew", "winget", "Docker", "AWS CLI", "Claude Code", "n8n"]
+artifacts:
+  entrypoint: "src/bootstrap-macos.sh"
+  readme: "README.md"
+  env_example: ".env.example"
+secrets:
+  required: []
+  optional: []
+runtime:
+  deployment_models: ["local"]
+validation:
+  last_tested_at: null
+  tested_by: null
+  evidence: []
+security:
+  data_classification: "public"
+  pii_expected: false
+  credentials_embedded: false
+  least_privilege_reviewed: true

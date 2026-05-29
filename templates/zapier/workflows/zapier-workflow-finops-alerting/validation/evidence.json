@@ -1,4 +1,7 @@
 {
+  "template_id": "tpl.zapier.workflow.finops-alerting",
   "status": "draft",
-  "evidence": []
+  "note": "Blueprint documentado. JavaScript del Step 4 revisado. No probado en Zapier.com con cuenta real (requiere plan Starter).",
+  "tests_run": [],
+  "last_updated": null
 }

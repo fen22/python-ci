@@ -1,1 +1,827 @@
-[]
+[
+  {
+    "schema_version": "1.0.0",
+    "template_id": "tpl.claude.mcp.infra-assistant",
+    "name": "Claude MCP Infra Assistant",
+    "slug": "infra-assistant",
+    "platform": "claude",
+    "template_type": "mcp",
+    "version": "0.1.0",
+    "status": "draft",
+    "language": [
+      "es",
+      "en"
+    ],
+    "summary": "Configuración MCP para Claude Code como asistente de infraestructura read-only. Incluye config para filesystem, GitHub, AWS y web search, con IAM policy mínima, allowlist de herramientas, política de aprobación humana y security checklist.",
+    "owner": {
+      "team": "clickit/bench-agentic",
+      "maintainers": [
+        "@fen22"
+      ]
+    },
+    "tags": [
+      "claude",
+      "mcp",
+      "infra",
+      "aws",
+      "read-only",
+      "security"
+    ],
+    "integrations": [
+      "Claude Code",
+      "MCP",
+      "AWS",
+      "GitHub"
+    ],
+    "artifacts": {
+      "entrypoint": "src/mcp-config.example.json",
+      "readme": "README.md",
+      "env_example": ".env.example"
+    },
+    "secrets": {
+      "required": [],
+      "optional": [
+        "GITHUB_PERSONAL_ACCESS_TOKEN",
+        "AWS_ACCESS_KEY_ID",
+        "AWS_SECRET_ACCESS_KEY",
+        "BRAVE_API_KEY"
+      ]
+    },
+    "runtime": {
+      "deployment_models": [
+        "local"
+      ]
+    },
+    "validation": {
+      "last_tested_at": null,
+      "tested_by": null,
+      "evidence": []
+    },
+    "security": {
+      "data_classification": "internal",
+      "pii_expected": false,
+      "credentials_embedded": false,
+      "least_privilege_reviewed": true
+    },
+    "path": "templates/claude/mcp/claude-mcp-infra-assistant"
+  },
+  {
+    "schema_version": "1.0.0",
+    "template_id": "tpl.claude.prompt-pack.finops-summary-v0",
+    "name": "Claude FinOps Summary (deprecated)",
+    "slug": "finops-summary",
+    "platform": "claude",
+    "template_type": "prompt-pack",
+    "version": "0.1.0",
+    "status": "deprecated",
+    "language": [
+      "es",
+      "en"
+    ],
+    "summary": "DEPRECATED. Reemplazado por tpl.claude.prompt-pack.finops-summary en templates/claude/prompt-packs/claude-prompt-pack-finops-summary/.",
+    "owner": {
+      "team": "clickit/bench-agentic",
+      "maintainers": [
+        "@fen22"
+      ]
+    },
+    "tags": [
+      "claude",
+      "finops",
+      "prompt"
+    ],
+    "integrations": [
+      "Claude"
+    ],
+    "artifacts": {
+      "entrypoint": "src/prompt.md",
+      "readme": "README.md",
+      "env_example": ".env.example"
+    },
+    "secrets": {
+      "required": [],
+      "optional": []
+    },
+    "runtime": {
+      "deployment_models": [
+        "local",
+        "cloud"
+      ]
+    },
+    "validation": {
+      "last_tested_at": null,
+      "tested_by": null,
+      "evidence": []
+    },
+    "security": {
+      "data_classification": "internal",
+      "pii_expected": false,
+      "credentials_embedded": false,
+      "least_privilege_reviewed": false
+    },
+    "path": "templates/claude/prompt-packs/claude-finops-summary"
+  },
+  {
+    "schema_version": "1.0.0",
+    "template_id": "tpl.claude.prompt-pack.doc-qa",
+    "name": "Claude Doc Q&A Prompt Pack",
+    "slug": "doc-qa",
+    "platform": "claude",
+    "template_type": "prompt-pack",
+    "version": "0.1.0",
+    "status": "draft",
+    "language": [
+      "es",
+      "en"
+    ],
+    "summary": "Pack de prompts para hacer Q&A sobre documentación técnica con Claude. Incluye system prompt, user prompt template, 3 ejemplos con respuestas esperadas y criterios de evaluación. Usable directamente en Claude.ai, Claude Code o API.",
+    "owner": {
+      "team": "clickit/bench-agentic",
+      "maintainers": [
+        "@fen22"
+      ]
+    },
+    "tags": [
+      "claude",
+      "prompt-pack",
+      "documentation",
+      "qa",
+      "rag"
+    ],
+    "integrations": [
+      "Claude API",
+      "Claude.ai"
+    ],
+    "artifacts": {
+      "entrypoint": "src/prompt.md",
+      "readme": "README.md",
+      "env_example": ".env.example"
+    },
+    "secrets": {
+      "required": [],
+      "optional": [
+        "ANTHROPIC_API_KEY"
+      ]
+    },
+    "runtime": {
+      "deployment_models": [
+        "api",
+        "claude.ai",
+        "claude-code"
+      ]
+    },
+    "validation": {
+      "last_tested_at": null,
+      "tested_by": null,
+      "evidence": []
+    },
+    "security": {
+      "data_classification": "internal",
+      "pii_expected": false,
+      "credentials_embedded": false,
+      "least_privilege_reviewed": true
+    },
+    "path": "templates/claude/prompt-packs/claude-prompt-pack-doc-qa"
+  },
+  {
+    "schema_version": "1.0.0",
+    "template_id": "tpl.claude.prompt-pack.finops-summary",
+    "name": "Claude FinOps Summary Prompt Pack",
+    "slug": "finops-summary",
+    "platform": "claude",
+    "template_type": "prompt-pack",
+    "version": "0.1.0",
+    "status": "draft",
+    "language": [
+      "es",
+      "en"
+    ],
+    "summary": "Pack de prompts para analizar costos cloud y generar resúmenes ejecutivos FinOps en español. Acepta CSV, JSON de AWS Cost Explorer o texto libre. Genera análisis estructurado con anomalías, hipótesis, acciones recomendadas y riesgos.",
+    "owner": {
+      "team": "clickit/bench-agentic",
+      "maintainers": [
+        "@fen22"
+      ]
+    },
+    "tags": [
+      "claude",
+      "finops",
+      "cloud-cost",
+      "prompt-pack",
+      "aws"
+    ],
+    "integrations": [
+      "Claude API",
+      "Claude.ai",
+      "AWS Cost Explorer"
+    ],
+    "artifacts": {
+      "entrypoint": "src/prompt.md",
+      "readme": "README.md",
+      "env_example": ".env.example"
+    },
+    "secrets": {
+      "required": [],
+      "optional": [
+        "ANTHROPIC_API_KEY"
+      ]
+    },
+    "runtime": {
+      "deployment_models": [
+        "api",
+        "claude.ai",
+        "claude-code"
+      ]
+    },
+    "validation": {
+      "last_tested_at": null,
+      "tested_by": null,
+      "evidence": []
+    },
+    "security": {
+      "data_classification": "internal",
+      "pii_expected": false,
+      "credentials_embedded": false,
+      "least_privilege_reviewed": true
+    },
+    "path": "templates/claude/prompt-packs/claude-prompt-pack-finops-summary"
+  },
+  {
+    "schema_version": "1.0.0",
+    "template_id": "tpl.langflow.chatbot.rag-docs",
+    "name": "Langflow RAG Docs Chatbot",
+    "slug": "rag-docs",
+    "platform": "langflow",
+    "template_type": "chatbot",
+    "version": "0.1.0",
+    "status": "draft",
+    "language": [
+      "es",
+      "en"
+    ],
+    "summary": "Flow de Langflow para chatbot RAG sobre documentación técnica. Incluye file loader, text splitter, embeddings (OpenAI/Anthropic), vector store Chroma, LLM Claude y cadena RetrievalQA. Importable en Langflow 1.x — verificar compatibilidad de nodos por versión.",
+    "owner": {
+      "team": "clickit/bench-agentic",
+      "maintainers": [
+        "@fen22"
+      ]
+    },
+    "tags": [
+      "langflow",
+      "rag",
+      "chatbot",
+      "docs",
+      "chroma",
+      "llm"
+    ],
+    "integrations": [
+      "Langflow",
+      "Chroma",
+      "Anthropic Claude",
+      "OpenAI Embeddings"
+    ],
+    "artifacts": {
+      "entrypoint": "src/flow.json",
+      "readme": "README.md",
+      "env_example": ".env.example"
+    },
+    "secrets": {
+      "required": [
+        "LLM_API_KEY"
+      ],
+      "optional": [
+        "OPENAI_API_KEY"
+      ]
+    },
+    "runtime": {
+      "deployment_models": [
+        "local",
+        "cloud"
+      ]
+    },
+    "validation": {
+      "last_tested_at": null,
+      "tested_by": null,
+      "evidence": []
+    },
+    "security": {
+      "data_classification": "internal",
+      "pii_expected": false,
+      "credentials_embedded": false,
+      "least_privilege_reviewed": false
+    },
+    "path": "templates/langflow/chatbots/langflow-chatbot-rag-docs"
+  },
+  {
+    "schema_version": "1.0.0",
+    "template_id": "tpl.langflow.infra-agent.infra-mcp-orchestrator",
+    "name": "Langflow Infra MCP Orchestrator",
+    "slug": "infra-mcp-orchestrator",
+    "platform": "langflow",
+    "template_type": "infra-agent",
+    "version": "0.1.0",
+    "status": "draft",
+    "language": [
+      "es",
+      "en"
+    ],
+    "summary": "Blueprint de agente de infraestructura en Langflow con guardrails de solo lectura. Usa herramientas HTTP personalizadas para inspeccionar AWS (EC2, CloudWatch, Cost Explorer) y GitHub. MCP nativo en Langflow es experimental — este template documenta la arquitectura target.",
+    "owner": {
+      "team": "clickit/bench-agentic",
+      "maintainers": [
+        "@fen22"
+      ]
+    },
+    "tags": [
+      "langflow",
+      "infra",
+      "agent",
+      "mcp",
+      "aws",
+      "read-only",
+      "security"
+    ],
+    "integrations": [
+      "Langflow",
+      "AWS",
+      "GitHub",
+      "Claude"
+    ],
+    "artifacts": {
+      "entrypoint": "src/flow.json",
+      "readme": "README.md",
+      "env_example": ".env.example"
+    },
+    "secrets": {
+      "required": [
+        "LLM_API_KEY"
+      ],
+      "optional": [
+        "GITHUB_TOKEN",
+        "INFRA_API_KEY"
+      ]
+    },
+    "runtime": {
+      "deployment_models": [
+        "local"
+      ]
+    },
+    "validation": {
+      "last_tested_at": null,
+      "tested_by": null,
+      "evidence": []
+    },
+    "security": {
+      "data_classification": "internal",
+      "pii_expected": false,
+      "credentials_embedded": false,
+      "least_privilege_reviewed": true
+    },
+    "path": "templates/langflow/infra-agents/langflow-infra-mcp-orchestrator"
+  },
+  {
+    "schema_version": "1.0.0",
+    "template_id": "tpl.n8n.chatbot.slack-docs",
+    "name": "Slack Docs Chatbot (deprecated)",
+    "slug": "slack-docs",
+    "platform": "n8n",
+    "template_type": "chatbot",
+    "version": "0.1.0",
+    "status": "deprecated",
+    "language": [
+      "es",
+      "en"
+    ],
+    "summary": "DEPRECATED. Reemplazado por tpl.n8n.chatbot.slack-engineering-docs en templates/n8n/chatbots/n8n-chatbot-slack-engineering-docs/.",
+    "owner": {
+      "team": "clickit/bench-agentic",
+      "maintainers": [
+        "@fen22"
+      ]
+    },
+    "tags": [
+      "slack",
+      "chatbot",
+      "docs"
+    ],
+    "integrations": [
+      "Slack",
+      "LLM",
+      "Docs"
+    ],
+    "artifacts": {
+      "entrypoint": "src/workflow.json",
+      "readme": "README.md",
+      "env_example": ".env.example"
+    },
+    "secrets": {
+      "required": [],
+      "optional": []
+    },
+    "runtime": {
+      "deployment_models": [
+        "local",
+        "cloud"
+      ]
+    },
+    "validation": {
+      "last_tested_at": null,
+      "tested_by": null,
+      "evidence": []
+    },
+    "security": {
+      "data_classification": "internal",
+      "pii_expected": false,
+      "credentials_embedded": false,
+      "least_privilege_reviewed": false
+    },
+    "path": "templates/n8n/chatbots/n8n-chatbot-slack-docs"
+  },
+  {
+    "schema_version": "1.0.0",
+    "template_id": "tpl.n8n.chatbot.slack-engineering-docs",
+    "name": "n8n Slack Engineering Docs Bot",
+    "slug": "slack-engineering-docs",
+    "platform": "n8n",
+    "template_type": "chatbot",
+    "version": "0.1.0",
+    "status": "draft",
+    "language": [
+      "es",
+      "en"
+    ],
+    "summary": "Bot de Slack que responde preguntas sobre documentación interna de ingeniería usando un LLM configurable. Recibe slash commands, consulta una fuente documental vía HTTP y responde en el canal.",
+    "owner": {
+      "team": "clickit/bench-agentic",
+      "maintainers": [
+        "@fen22"
+      ]
+    },
+    "tags": [
+      "slack",
+      "chatbot",
+      "docs",
+      "llm",
+      "n8n"
+    ],
+    "integrations": [
+      "Slack",
+      "Anthropic Claude",
+      "HTTP Docs Source"
+    ],
+    "artifacts": {
+      "entrypoint": "src/workflow.json",
+      "readme": "README.md",
+      "env_example": ".env.example"
+    },
+    "secrets": {
+      "required": [
+        "SLACK_BOT_TOKEN",
+        "LLM_API_KEY",
+        "DOCS_SOURCE_URL"
+      ],
+      "optional": [
+        "LLM_MODEL",
+        "LLM_API_URL"
+      ]
+    },
+    "runtime": {
+      "deployment_models": [
+        "local",
+        "cloud"
+      ]
+    },
+    "validation": {
+      "last_tested_at": null,
+      "tested_by": null,
+      "evidence": []
+    },
+    "security": {
+      "data_classification": "internal",
+      "pii_expected": false,
+      "credentials_embedded": false,
+      "least_privilege_reviewed": false
+    },
+    "path": "templates/n8n/chatbots/n8n-chatbot-slack-engineering-docs"
+  },
+  {
+    "schema_version": "1.0.0",
+    "template_id": "tpl.n8n.workflow.cloud-cost-research",
+    "name": "n8n Cloud Cost Research Workflow",
+    "slug": "cloud-cost-research",
+    "platform": "n8n",
+    "template_type": "workflow",
+    "version": "0.1.0",
+    "status": "draft",
+    "language": [
+      "es",
+      "en"
+    ],
+    "summary": "Workflow que obtiene costos cloud (AWS Cost Explorer o CSV fixture), genera un resumen ejecutivo FinOps con LLM y envía alertas a Slack si se supera el threshold configurado. Soporta ejecución manual o schedule semanal.",
+    "owner": {
+      "team": "clickit/bench-agentic",
+      "maintainers": [
+        "@fen22"
+      ]
+    },
+    "tags": [
+      "finops",
+      "cloud-cost",
+      "aws",
+      "research",
+      "n8n"
+    ],
+    "integrations": [
+      "AWS Cost Explorer",
+      "Slack",
+      "Anthropic Claude"
+    ],
+    "artifacts": {
+      "entrypoint": "src/workflow.json",
+      "readme": "README.md",
+      "env_example": ".env.example"
+    },
+    "secrets": {
+      "required": [
+        "LLM_API_KEY",
+        "SLACK_WEBHOOK_URL"
+      ],
+      "optional": [
+        "AWS_ACCESS_KEY_ID",
+        "AWS_SECRET_ACCESS_KEY",
+        "COST_ALERT_THRESHOLD",
+        "COST_DATA_MODE",
+        "CSV_FIXTURE_URL",
+        "LLM_MODEL",
+        "LLM_API_URL"
+      ]
+    },
+    "runtime": {
+      "deployment_models": [
+        "local",
+        "cloud"
+      ]
+    },
+    "validation": {
+      "last_tested_at": null,
+      "tested_by": null,
+      "evidence": []
+    },
+    "security": {
+      "data_classification": "internal",
+      "pii_expected": false,
+      "credentials_embedded": false,
+      "least_privilege_reviewed": false
+    },
+    "path": "templates/n8n/workflows/n8n-workflow-cloud-cost-research"
+  },
+  {
+    "schema_version": "1.0.0",
+    "template_id": "tpl.n8n.workflow.pr-documentation-generator",
+    "name": "n8n PR Documentation Generator",
+    "slug": "pr-documentation-generator",
+    "platform": "n8n",
+    "template_type": "workflow",
+    "version": "0.1.0",
+    "status": "draft",
+    "language": [
+      "es",
+      "en"
+    ],
+    "summary": "Workflow que escucha eventos de GitHub PRs, analiza los archivos cambiados usando un LLM y publica automáticamente documentación técnica estructurada como comentario en el PR.",
+    "owner": {
+      "team": "clickit/bench-agentic",
+      "maintainers": [
+        "@fen22"
+      ]
+    },
+    "tags": [
+      "github",
+      "pr",
+      "documentation",
+      "llm",
+      "devops",
+      "n8n"
+    ],
+    "integrations": [
+      "GitHub",
+      "Anthropic Claude"
+    ],
+    "artifacts": {
+      "entrypoint": "src/workflow.json",
+      "readme": "README.md",
+      "env_example": ".env.example"
+    },
+    "secrets": {
+      "required": [
+        "GITHUB_TOKEN",
+        "LLM_API_KEY"
+      ],
+      "optional": [
+        "LLM_MODEL",
+        "LLM_API_URL"
+      ]
+    },
+    "runtime": {
+      "deployment_models": [
+        "local",
+        "cloud"
+      ]
+    },
+    "validation": {
+      "last_tested_at": null,
+      "tested_by": null,
+      "evidence": []
+    },
+    "security": {
+      "data_classification": "internal",
+      "pii_expected": false,
+      "credentials_embedded": false,
+      "least_privilege_reviewed": false
+    },
+    "path": "templates/n8n/workflows/n8n-workflow-pr-documentation-generator"
+  },
+  {
+    "schema_version": "1.0.0",
+    "template_id": "tpl.others.initial-setup.mac-windows-ai-devops-bootstrap",
+    "name": "AI DevOps Bootstrap (deprecated)",
+    "slug": "mac-windows-ai-devops-bootstrap",
+    "platform": "others",
+    "template_type": "initial-setup",
+    "version": "0.1.0",
+    "status": "deprecated",
+    "language": [
+      "es",
+      "en"
+    ],
+    "summary": "DEPRECATED. Reemplazado por tpl.others.initial-setup.ai-devops-bootstrap en templates/others/initial-setup/others-initial-setup-ai-devops-bootstrap/.",
+    "owner": {
+      "team": "clickit/bench-agentic",
+      "maintainers": [
+        "@fen22"
+      ]
+    },
+    "tags": [
+      "bootstrap",
+      "devops",
+      "ai-tools"
+    ],
+    "integrations": [
+      "macOS",
+      "Windows"
+    ],
+    "artifacts": {
+      "entrypoint": "src/README.md",
+      "readme": "README.md",
+      "env_example": ".env.example"
+    },
+    "secrets": {
+      "required": [],
+      "optional": []
+    },
+    "runtime": {
+      "deployment_models": [
+        "local"
+      ]
+    },
+    "validation": {
+      "last_tested_at": null,
+      "tested_by": null,
+      "evidence": []
+    },
+    "security": {
+      "data_classification": "public",
+      "pii_expected": false,
+      "credentials_embedded": false,
+      "least_privilege_reviewed": false
+    },
+    "path": "templates/others/initial-setup/mac-windows-ai-devops-bootstrap"
+  },
+  {
+    "schema_version": "1.0.0",
+    "template_id": "tpl.others.initial-setup.ai-devops-bootstrap",
+    "name": "AI DevOps Bootstrap (macOS + Windows)",
+    "slug": "ai-devops-bootstrap",
+    "platform": "others",
+    "template_type": "initial-setup",
+    "version": "0.1.0",
+    "status": "draft",
+    "language": [
+      "es",
+      "en"
+    ],
+    "summary": "Scripts de bootstrap para configurar un entorno AI/DevOps en macOS y Windows. Instala Git, Python, Node.js, Docker, AWS CLI, Claude Code y n8n local. Pide confirmación antes de cada instalación. No contiene secretos.",
+    "owner": {
+      "team": "clickit/bench-agentic",
+      "maintainers": [
+        "@fen22"
+      ]
+    },
+    "tags": [
+      "bootstrap",
+      "devops",
+      "ai-tools",
+      "macos",
+      "windows",
+      "setup"
+    ],
+    "integrations": [
+      "Homebrew",
+      "winget",
+      "Docker",
+      "AWS CLI",
+      "Claude Code",
+      "n8n"
+    ],
+    "artifacts": {
+      "entrypoint": "src/bootstrap-macos.sh",
+      "readme": "README.md",
+      "env_example": ".env.example"
+    },
+    "secrets": {
+      "required": [],
+      "optional": []
+    },
+    "runtime": {
+      "deployment_models": [
+        "local"
+      ]
+    },
+    "validation": {
+      "last_tested_at": null,
+      "tested_by": null,
+      "evidence": []
+    },
+    "security": {
+      "data_classification": "public",
+      "pii_expected": false,
+      "credentials_embedded": false,
+      "least_privilege_reviewed": true
+    },
+    "path": "templates/others/initial-setup/others-initial-setup-ai-devops-bootstrap"
+  },
+  {
+    "schema_version": "1.0.0",
+    "template_id": "tpl.zapier.workflow.finops-alerting",
+    "name": "Zapier FinOps Alerting Blueprint",
+    "slug": "finops-alerting",
+    "platform": "zapier",
+    "template_type": "workflow",
+    "version": "0.1.0",
+    "status": "draft",
+    "language": [
+      "es",
+      "en"
+    ],
+    "summary": "Blueprint implementable paso a paso en Zapier para alertas FinOps. Incluye Schedule trigger, fetch de costos cloud vía API/webhook, lógica de threshold en JavaScript, alerta en Slack y email opcional. No es un archivo importable (limitación de Zapier).",
+    "owner": {
+      "team": "clickit/bench-agentic",
+      "maintainers": [
+        "@fen22"
+      ]
+    },
+    "tags": [
+      "zapier",
+      "finops",
+      "alerting",
+      "slack",
+      "aws",
+      "cost"
+    ],
+    "integrations": [
+      "Zapier",
+      "Slack",
+      "AWS Cost Explorer",
+      "Email"
+    ],
+    "artifacts": {
+      "entrypoint": "src/zap.blueprint.md",
+      "readme": "README.md",
+      "env_example": ".env.example"
+    },
+    "secrets": {
+      "required": [],
+      "optional": [
+        "SLACK_WEBHOOK_URL",
+        "AWS_COST_API_URL"
+      ]
+    },
+    "runtime": {
+      "deployment_models": [
+        "cloud"
+      ]
+    },
+    "validation": {
+      "last_tested_at": null,
+      "tested_by": null,
+      "evidence": []
+    },
+    "security": {
+      "data_classification": "internal",
+      "pii_expected": false,
+      "credentials_embedded": false,
+      "least_privilege_reviewed": false
+    },
+    "path": "templates/zapier/workflows/zapier-workflow-finops-alerting"
+  }
+]

@@ -1,0 +1,288 @@
+{
+  "name": "Slack Engineering Docs Bot",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "slack-docs",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "wh-001-slack-trigger",
+      "name": "Slack Slash Command",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [120, 300],
+      "webhookId": "a1b2c3d4-1234-5678-abcd-ef0987654321"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ response_type: 'ephemeral', text: ':hourglass: Buscando en la documentación, espera un momento...' }) }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "rw-002-ack",
+      "name": "Acknowledge Request",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [340, 300]
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1",
+              "name": "user_query",
+              "value": "={{ $('Slack Slash Command').item.json.body?.text || $('Slack Slash Command').item.json.text || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "a2",
+              "name": "response_url",
+              "value": "={{ $('Slack Slash Command').item.json.body?.response_url || $('Slack Slash Command').item.json.response_url || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "a3",
+              "name": "user_name",
+              "value": "={{ $('Slack Slash Command').item.json.body?.user_name || $('Slack Slash Command').item.json.user_name || 'unknown' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "set-003-extract",
+      "name": "Extract Query",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [560, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.DOCS_SOURCE_URL }}",
+        "options": {
+          "timeout": 30000,
+          "response": {
+            "response": {
+              "fullResponse": false
+            }
+          }
+        }
+      },
+      "id": "http-004-fetch-docs",
+      "name": "Fetch Documentation",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [780, 300],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const query = $('Extract Query').first().json.user_query;\nconst rawDocs = $input.first().json;\n\n// Support different doc formats: plain text, JSON object, array\nlet docsText;\nif (typeof rawDocs === 'string') {\n  docsText = rawDocs;\n} else if (rawDocs && rawDocs.content) {\n  docsText = rawDocs.content;\n} else if (rawDocs && rawDocs.body) {\n  docsText = rawDocs.body;\n} else {\n  docsText = JSON.stringify(rawDocs, null, 2);\n}\n\nconst truncated = docsText.substring(0, 8000);\n\nreturn [{\n  json: {\n    messages: [\n      {\n        role: 'user',\n        content: `Answer the following question using ONLY the documentation provided below.\\nIf the documentation does not contain the answer, respond with \\\"I couldn't find this in our engineering docs.\\\" and suggest where else to look.\\n\\nFormat your response for Slack: use *bold* for key terms, _italic_ for emphasis, and • bullet points for lists.\\n\\n--- DOCUMENTATION CONTEXT ---\\n${truncated}\\n--- END CONTEXT ---\\n\\nQuestion from @${'Extract Query'}: ${query}`\n      }\n    ],\n    user_query: query,\n    user_name: $('Extract Query').first().json.user_name,\n    response_url: $('Extract Query').first().json.response_url\n  }\n}];"
+      },
+      "id": "code-005-prompt",
+      "name": "Build Prompt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1000, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.LLM_API_URL || 'https://api.anthropic.com/v1/messages' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-api-key",
+              "value": "={{ $env.LLM_API_KEY }}"
+            },
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ model: $env.LLM_MODEL || 'claude-3-5-sonnet-20241022', max_tokens: 1024, system: 'You are an engineering documentation assistant for ClickIT. Be concise, accurate, and always cite specific sections or page numbers when possible.', messages: $('Build Prompt').first().json.messages }) }}",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "http-006-llm",
+      "name": "Call LLM API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1220, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const llmResponse = $input.first().json;\nconst responseText = llmResponse?.content?.[0]?.text || llmResponse?.choices?.[0]?.message?.content || 'Error: could not parse LLM response';\nconst userName = $('Build Prompt').first().json.user_name;\nconst responseUrl = $('Build Prompt').first().json.response_url;\n\nreturn [{\n  json: {\n    response_url: responseUrl,\n    slack_payload: JSON.stringify({\n      response_type: 'in_channel',\n      text: `*Docs Bot* | Respuesta para @${userName}:`,\n      attachments: [\n        {\n          text: responseText,\n          color: '#36a64f',\n          footer: 'ClickIT Engineering Docs Bot',\n          mrkdwn_in: ['text']\n        }\n      ]\n    })\n  }\n}];"
+      },
+      "id": "code-007-format",
+      "name": "Format Slack Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1440, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.response_url }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.slack_payload }}",
+        "options": {}
+      },
+      "id": "http-008-slack-post",
+      "name": "Send Answer to Slack",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1660, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Extract Query').first().json.response_url }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ response_type: 'ephemeral', text: ':x: Error al buscar en la documentación. Intenta de nuevo o contacta al equipo.' }) }}",
+        "options": {}
+      },
+      "id": "http-009-error",
+      "name": "Send Error to Slack",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1000, 500]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Slack Slash Command": {
+      "main": [
+        [
+          {
+            "node": "Acknowledge Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Acknowledge Request": {
+      "main": [
+        [
+          {
+            "node": "Extract Query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Query": {
+      "main": [
+        [
+          {
+            "node": "Fetch Documentation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Documentation": {
+      "main": [
+        [
+          {
+            "node": "Build Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ],
+      "error": [
+        [
+          {
+            "node": "Send Error to Slack",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Prompt": {
+      "main": [
+        [
+          {
+            "node": "Call LLM API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call LLM API": {
+      "main": [
+        [
+          {
+            "node": "Format Slack Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Slack Response": {
+      "main": [
+        [
+          {
+            "node": "Send Answer to Slack",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "b1a2c3d4-e5f6-7890-abcd-111122223333",
+  "meta": {
+    "templateCredsSetupCompleted": false,
+    "instanceId": ""
+  },
+  "id": "c1d2e3f4-a5b6-c7d8-e9f0-aabbccddeeff",
+  "tags": ["slack", "docs", "chatbot"]
+}

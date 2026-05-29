@@ -1,13 +1,13 @@
 schema_version: "1.0.0"
 template_id: "tpl.others.initial-setup.mac-windows-ai-devops-bootstrap"
-name: "AI DevOps Bootstrap"
+name: "AI DevOps Bootstrap (deprecated)"
 slug: "mac-windows-ai-devops-bootstrap"
 platform: "others"
 template_type: "initial-setup"
 version: "0.1.0"
-status: "draft"
+status: "deprecated"
 language: ["es", "en"]
-summary: "Bootstrap de herramientas AI/DevOps para macOS y Windows."
+summary: "DEPRECATED. Reemplazado por tpl.others.initial-setup.ai-devops-bootstrap en templates/others/initial-setup/others-initial-setup-ai-devops-bootstrap/."
 owner:
   team: "clickit/bench-agentic"
   maintainers: ["@fen22"]
@@ -15,15 +15,19 @@ tags: ["bootstrap", "devops", "ai-tools"]
 integrations: ["macOS", "Windows"]
 artifacts:
   entrypoint: "src/README.md"
+  readme: "README.md"
+  env_example: ".env.example"
 secrets:
   required: []
   optional: []
 runtime:
-  deployment_models: ["local", "cloud"]
+  deployment_models: ["local"]
 validation:
   last_tested_at: null
   tested_by: null
+  evidence: []
 security:
-  data_classification: "internal"
+  data_classification: "public"
   pii_expected: false
   credentials_embedded: false
+  least_privilege_reviewed: false

@@ -1,29 +1,35 @@
 schema_version: "1.0.0"
 template_id: "tpl.zapier.workflow.finops-alerting"
-name: "Zapier FinOps Alerting"
+name: "Zapier FinOps Alerting Blueprint"
 slug: "finops-alerting"
 platform: "zapier"
 template_type: "workflow"
 version: "0.1.0"
 status: "draft"
 language: ["es", "en"]
-summary: "Blueprint para alertas FinOps en Slack y email."
+summary: "Blueprint implementable paso a paso en Zapier para alertas FinOps. Incluye Schedule trigger, fetch de costos cloud vía API/webhook, lógica de threshold en JavaScript, alerta en Slack y email opcional. No es un archivo importable (limitación de Zapier)."
 owner:
   team: "clickit/bench-agentic"
   maintainers: ["@fen22"]
-tags: ["zapier", "finops", "alerting"]
-integrations: ["Zapier", "Slack", "Email"]
+tags: ["zapier", "finops", "alerting", "slack", "aws", "cost"]
+integrations: ["Zapier", "Slack", "AWS Cost Explorer", "Email"]
 artifacts:
   entrypoint: "src/zap.blueprint.md"
+  readme: "README.md"
+  env_example: ".env.example"
 secrets:
   required: []
-  optional: []
+  optional:
+    - SLACK_WEBHOOK_URL
+    - AWS_COST_API_URL
 runtime:
-  deployment_models: ["local", "cloud"]
+  deployment_models: ["cloud"]
 validation:
   last_tested_at: null
   tested_by: null
+  evidence: []
 security:
   data_classification: "internal"
   pii_expected: false
   credentials_embedded: false
+  least_privilege_reviewed: false

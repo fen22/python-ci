@@ -1,0 +1,19 @@
+{
+  "_comment": "Fixture de prueba para simular un GitHub PR webhook payload",
+  "action": "opened",
+  "number": 42,
+  "pull_request": {
+    "number": 42,
+    "title": "feat: add user authentication middleware",
+    "body": "Adds JWT-based authentication middleware for the API endpoints. Closes #38.",
+    "html_url": "https://github.com/example-org/example-repo/pull/42",
+    "user": { "login": "dev-engineer" },
+    "base": { "ref": "main" },
+    "head": { "ref": "feat/auth-middleware" }
+  },
+  "repository": {
+    "full_name": "example-org/example-repo",
+    "name": "example-repo"
+  },
+  "sender": { "login": "dev-engineer" }
+}

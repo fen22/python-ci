@@ -1,29 +1,36 @@
 schema_version: "1.0.0"
 template_id: "tpl.langflow.infra-agent.infra-mcp-orchestrator"
-name: "Infra MCP Orchestrator"
+name: "Langflow Infra MCP Orchestrator"
 slug: "infra-mcp-orchestrator"
 platform: "langflow"
 template_type: "infra-agent"
 version: "0.1.0"
 status: "draft"
 language: ["es", "en"]
-summary: "Orquestador visual para agentes de infraestructura vía MCP."
+summary: "Blueprint de agente de infraestructura en Langflow con guardrails de solo lectura. Usa herramientas HTTP personalizadas para inspeccionar AWS (EC2, CloudWatch, Cost Explorer) y GitHub. MCP nativo en Langflow es experimental — este template documenta la arquitectura target."
 owner:
   team: "clickit/bench-agentic"
   maintainers: ["@fen22"]
-tags: ["mcp", "infra", "agent"]
-integrations: ["Langflow", "MCP", "Cloud APIs"]
+tags: ["langflow", "infra", "agent", "mcp", "aws", "read-only", "security"]
+integrations: ["Langflow", "AWS", "GitHub", "Claude"]
 artifacts:
   entrypoint: "src/flow.json"
+  readme: "README.md"
+  env_example: ".env.example"
 secrets:
-  required: ["LLM_API_KEY"]
-  optional: []
+  required:
+    - LLM_API_KEY
+  optional:
+    - GITHUB_TOKEN
+    - INFRA_API_KEY
 runtime:
-  deployment_models: ["local", "cloud"]
+  deployment_models: ["local"]
 validation:
   last_tested_at: null
   tested_by: null
+  evidence: []
 security:
   data_classification: "internal"
   pii_expected: false
   credentials_embedded: false
+  least_privilege_reviewed: true

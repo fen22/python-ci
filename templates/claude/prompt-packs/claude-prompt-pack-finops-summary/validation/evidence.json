@@ -1,0 +1,7 @@
+{
+  "template_id": "tpl.claude.prompt-pack.finops-summary",
+  "status": "draft",
+  "note": "Prompts revisados manualmente. Ejemplos verificados conceptualmente. Tests de smoke pendientes con API real.",
+  "tests_run": [],
+  "last_updated": null
+}

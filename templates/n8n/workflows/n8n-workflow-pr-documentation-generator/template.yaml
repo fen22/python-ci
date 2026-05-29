@@ -1,0 +1,37 @@
+schema_version: "1.0.0"
+template_id: "tpl.n8n.workflow.pr-documentation-generator"
+name: "n8n PR Documentation Generator"
+slug: "pr-documentation-generator"
+platform: "n8n"
+template_type: "workflow"
+version: "0.1.0"
+status: "draft"
+language: ["es", "en"]
+summary: "Workflow que escucha eventos de GitHub PRs, analiza los archivos cambiados usando un LLM y publica automáticamente documentación técnica estructurada como comentario en el PR."
+owner:
+  team: "clickit/bench-agentic"
+  maintainers: ["@fen22"]
+tags: ["github", "pr", "documentation", "llm", "devops", "n8n"]
+integrations: ["GitHub", "Anthropic Claude"]
+artifacts:
+  entrypoint: "src/workflow.json"
+  readme: "README.md"
+  env_example: ".env.example"
+secrets:
+  required:
+    - GITHUB_TOKEN
+    - LLM_API_KEY
+  optional:
+    - LLM_MODEL
+    - LLM_API_URL
+runtime:
+  deployment_models: ["local", "cloud"]
+validation:
+  last_tested_at: null
+  tested_by: null
+  evidence: []
+security:
+  data_classification: "internal"
+  pii_expected: false
+  credentials_embedded: false
+  least_privilege_reviewed: false

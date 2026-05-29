@@ -1,0 +1,7 @@
+{
+  "template_id": "tpl.claude.prompt-pack.doc-qa",
+  "status": "draft",
+  "note": "Prompts revisados manualmente. Tests de smoke pendientes con Claude.ai.",
+  "tests_run": [],
+  "last_updated": null
+}

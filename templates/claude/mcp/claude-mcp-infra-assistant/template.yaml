@@ -7,23 +7,31 @@ template_type: "mcp"
 version: "0.1.0"
 status: "draft"
 language: ["es", "en"]
-summary: "Config base para asistente de infraestructura vía MCP."
+summary: "Configuración MCP para Claude Code como asistente de infraestructura read-only. Incluye config para filesystem, GitHub, AWS y web search, con IAM policy mínima, allowlist de herramientas, política de aprobación humana y security checklist."
 owner:
   team: "clickit/bench-agentic"
   maintainers: ["@fen22"]
-tags: ["claude", "mcp", "infra"]
-integrations: ["Claude Code", "MCP"]
+tags: ["claude", "mcp", "infra", "aws", "read-only", "security"]
+integrations: ["Claude Code", "MCP", "AWS", "GitHub"]
 artifacts:
   entrypoint: "src/mcp-config.example.json"
+  readme: "README.md"
+  env_example: ".env.example"
 secrets:
   required: []
-  optional: []
+  optional:
+    - GITHUB_PERSONAL_ACCESS_TOKEN
+    - AWS_ACCESS_KEY_ID
+    - AWS_SECRET_ACCESS_KEY
+    - BRAVE_API_KEY
 runtime:
-  deployment_models: ["local", "cloud"]
+  deployment_models: ["local"]
 validation:
   last_tested_at: null
   tested_by: null
+  evidence: []
 security:
   data_classification: "internal"
   pii_expected: false
   credentials_embedded: false
+  least_privilege_reviewed: true

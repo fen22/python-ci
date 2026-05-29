@@ -1,1 +1,285 @@
-{"name":"Infra MCP Orchestrator","data":{}}
+{
+  "_schema_note": "Langflow Infra MCP Orchestrator — blueprint conceptual. MCP (Model Context Protocol) en Langflow está en evolución. Este flow usa AgentExecutor con herramientas HTTP para simular la interacción con MCP servers. Marcar como draft hasta que Langflow tenga soporte nativo de MCP.",
+  "_status": "draft",
+  "_safety_note": "READ-ONLY MODE ONLY. This orchestrator must never execute destructive infrastructure actions. All tools are limited to describe/list/get operations.",
+  "id": "infra-mcp-orchestrator-flow",
+  "name": "Infra MCP Orchestrator",
+  "description": "Agente visual para inspección de infraestructura usando herramientas configurables. Read-only por defecto.",
+  "data": {
+    "nodes": [
+      {
+        "id": "ChatInput-node",
+        "type": "ChatInput",
+        "position": { "x": 100, "y": 300 },
+        "data": {
+          "type": "ChatInput",
+          "id": "ChatInput-node",
+          "display_name": "Infrastructure Question",
+          "description": "User question about infrastructure. Examples: 'How many EC2 instances are running?', 'What PRs are open?'",
+          "template": {
+            "input_value": {
+              "field_type": "str",
+              "placeholder": "¿Cuántas instancias EC2 están corriendo en producción?",
+              "value": ""
+            },
+            "sender": { "field_type": "str", "value": "User" }
+          },
+          "base_classes": ["Message"]
+        }
+      },
+      {
+        "id": "SystemPrompt-node",
+        "type": "PromptTemplate",
+        "position": { "x": 100, "y": 100 },
+        "data": {
+          "type": "PromptTemplate",
+          "id": "SystemPrompt-node",
+          "display_name": "Safety System Prompt",
+          "description": "Read-only guardrails for the agent",
+          "template": {
+            "template": {
+              "field_type": "str",
+              "value": "You are an infrastructure assistant with READ-ONLY access. You can inspect and describe cloud resources, but you CANNOT modify, create, or delete any resource.\n\nAllowed actions:\n- Describe and list resources (EC2, RDS, EKS, S3 metadata)\n- Read GitHub PRs and issues\n- Read CloudWatch metrics and alarms\n- Analyze cost data\n\nProhibited actions:\n- Terminate, stop, or start instances\n- Delete any resource\n- Modify IAM policies or security groups\n- Access secret values\n- Merge or push to repositories\n\nIf asked to perform a prohibited action, respond: 'This action requires explicit human approval through our change management process. I can help you prepare the change request.'\n\nAlways cite the source of your information."
+            }
+          },
+          "base_classes": ["Prompt"]
+        }
+      },
+      {
+        "id": "EC2Tool-node",
+        "type": "CustomComponent",
+        "position": { "x": 600, "y": 50 },
+        "data": {
+          "type": "CustomComponent",
+          "id": "EC2Tool-node",
+          "display_name": "AWS EC2 Inspector (Read-Only)",
+          "description": "HTTP tool to call AWS EC2 describe API via Lambda proxy. Configure YOUR_LAMBDA_URL with a Lambda function that has read-only EC2 permissions.",
+          "template": {
+            "api_url": {
+              "field_type": "str",
+              "value": "",
+              "placeholder": "https://your-lambda.amazonaws.com/prod/ec2/describe",
+              "_note": "Replace with your Lambda/API Gateway URL that wraps aws ec2 describe-instances"
+            },
+            "api_key": {
+              "field_type": "str",
+              "password": true,
+              "value": "",
+              "_env_var": "INFRA_API_KEY"
+            }
+          },
+          "base_classes": ["Tool"]
+        }
+      },
+      {
+        "id": "GitHubTool-node",
+        "type": "CustomComponent",
+        "position": { "x": 600, "y": 200 },
+        "data": {
+          "type": "CustomComponent",
+          "id": "GitHubTool-node",
+          "display_name": "GitHub PR Reader (Read-Only)",
+          "description": "Read GitHub PRs and issues via API. Uses read-only token.",
+          "template": {
+            "github_token": {
+              "field_type": "str",
+              "password": true,
+              "value": "",
+              "_env_var": "GITHUB_TOKEN",
+              "_note": "Fine-grained token with read-only repository access"
+            },
+            "repo_owner": {
+              "field_type": "str",
+              "value": ""
+            },
+            "repo_name": {
+              "field_type": "str",
+              "value": ""
+            }
+          },
+          "base_classes": ["Tool"]
+        }
+      },
+      {
+        "id": "CloudWatchTool-node",
+        "type": "CustomComponent",
+        "position": { "x": 600, "y": 350 },
+        "data": {
+          "type": "CustomComponent",
+          "id": "CloudWatchTool-node",
+          "display_name": "CloudWatch Metrics Reader",
+          "description": "Read CloudWatch metrics and active alarms via Lambda proxy.",
+          "template": {
+            "api_url": {
+              "field_type": "str",
+              "value": "",
+              "placeholder": "https://your-lambda.amazonaws.com/prod/cloudwatch/alarms"
+            },
+            "api_key": {
+              "field_type": "str",
+              "password": true,
+              "value": "",
+              "_env_var": "INFRA_API_KEY"
+            }
+          },
+          "base_classes": ["Tool"]
+        }
+      },
+      {
+        "id": "CostTool-node",
+        "type": "CustomComponent",
+        "position": { "x": 600, "y": 500 },
+        "data": {
+          "type": "CustomComponent",
+          "id": "CostTool-node",
+          "display_name": "AWS Cost Explorer Reader",
+          "description": "Read cost data from AWS Cost Explorer via Lambda proxy.",
+          "template": {
+            "api_url": {
+              "field_type": "str",
+              "value": "",
+              "placeholder": "https://your-lambda.amazonaws.com/prod/costs"
+            },
+            "api_key": {
+              "field_type": "str",
+              "password": true,
+              "value": "",
+              "_env_var": "INFRA_API_KEY"
+            }
+          },
+          "base_classes": ["Tool"]
+        }
+      },
+      {
+        "id": "AgentExecutor-node",
+        "type": "AgentComponent",
+        "position": { "x": 900, "y": 300 },
+        "data": {
+          "type": "AgentComponent",
+          "id": "AgentExecutor-node",
+          "display_name": "Infra Agent",
+          "description": "ReAct agent that uses the available tools to answer infrastructure questions. All tools are read-only.",
+          "template": {
+            "agent_llm": {
+              "field_type": "str",
+              "value": "ChatAnthropic",
+              "_note": "Connect to AnthropicLLM-node"
+            },
+            "max_iterations": {
+              "field_type": "int",
+              "value": 5,
+              "_note": "Limit iterations to prevent runaway tool calls"
+            },
+            "handle_parsing_errors": {
+              "field_type": "bool",
+              "value": true
+            }
+          },
+          "base_classes": ["Agent"]
+        }
+      },
+      {
+        "id": "AnthropicLLM-node",
+        "type": "ChatAnthropic",
+        "position": { "x": 600, "y": 300 },
+        "data": {
+          "type": "ChatAnthropic",
+          "id": "AnthropicLLM-node",
+          "display_name": "Claude LLM",
+          "template": {
+            "anthropic_api_key": {
+              "field_type": "str",
+              "password": true,
+              "value": "",
+              "_env_var": "LLM_API_KEY"
+            },
+            "model_name": {
+              "field_type": "str",
+              "value": "claude-3-5-sonnet-20241022"
+            },
+            "max_tokens": { "field_type": "int", "value": 2048 },
+            "temperature": { "field_type": "float", "value": 0.1 }
+          },
+          "base_classes": ["LanguageModel"]
+        }
+      },
+      {
+        "id": "ChatOutput-node",
+        "type": "ChatOutput",
+        "position": { "x": 1150, "y": 300 },
+        "data": {
+          "type": "ChatOutput",
+          "id": "ChatOutput-node",
+          "display_name": "Infra Assistant Response",
+          "template": {
+            "sender": { "field_type": "str", "value": "Machine" }
+          },
+          "base_classes": ["Message"]
+        }
+      }
+    ],
+    "edges": [
+      {
+        "id": "edge-systemprompt-agent",
+        "source": "SystemPrompt-node",
+        "target": "AgentExecutor-node",
+        "sourceHandle": "SystemPrompt-node-Prompt",
+        "targetHandle": "AgentExecutor-node-system_prompt"
+      },
+      {
+        "id": "edge-input-agent",
+        "source": "ChatInput-node",
+        "target": "AgentExecutor-node",
+        "sourceHandle": "ChatInput-node-Message",
+        "targetHandle": "AgentExecutor-node-input_value"
+      },
+      {
+        "id": "edge-llm-agent",
+        "source": "AnthropicLLM-node",
+        "target": "AgentExecutor-node",
+        "sourceHandle": "AnthropicLLM-node-LanguageModel",
+        "targetHandle": "AgentExecutor-node-llm"
+      },
+      {
+        "id": "edge-ec2-agent",
+        "source": "EC2Tool-node",
+        "target": "AgentExecutor-node",
+        "sourceHandle": "EC2Tool-node-Tool",
+        "targetHandle": "AgentExecutor-node-tools"
+      },
+      {
+        "id": "edge-github-agent",
+        "source": "GitHubTool-node",
+        "target": "AgentExecutor-node",
+        "sourceHandle": "GitHubTool-node-Tool",
+        "targetHandle": "AgentExecutor-node-tools"
+      },
+      {
+        "id": "edge-cloudwatch-agent",
+        "source": "CloudWatchTool-node",
+        "target": "AgentExecutor-node",
+        "sourceHandle": "CloudWatchTool-node-Tool",
+        "targetHandle": "AgentExecutor-node-tools"
+      },
+      {
+        "id": "edge-cost-agent",
+        "source": "CostTool-node",
+        "target": "AgentExecutor-node",
+        "sourceHandle": "CostTool-node-Tool",
+        "targetHandle": "AgentExecutor-node-tools"
+      },
+      {
+        "id": "edge-agent-output",
+        "source": "AgentExecutor-node",
+        "target": "ChatOutput-node",
+        "sourceHandle": "AgentExecutor-node-Message",
+        "targetHandle": "ChatOutput-node-input_value"
+      }
+    ],
+    "viewport": { "x": 0, "y": 0, "zoom": 0.7 }
+  },
+  "is_component": false,
+  "updated_at": "2025-05-29T00:00:00Z",
+  "_compatibility_note": "MCP native support in Langflow is experimental. Custom tool nodes (EC2Tool, GitHubTool, etc.) need to be implemented as CustomComponent classes with HTTP calls to Lambda proxy endpoints. See README for implementation guidance.",
+  "_what_this_is_not": "This is NOT a plug-and-play flow. It is a blueprint that shows the intended architecture. Custom components require implementation."
+}

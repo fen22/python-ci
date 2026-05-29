@@ -1,0 +1,111 @@
+ClickIT Engineering Documentation — Sample
+==========================================
+
+## Deployment Process
+
+### Prerequisites
+- Docker 24.x or higher
+- kubectl configured for the target cluster
+- Access to the container registry (registry.clickit.internal)
+- AWS CLI configured with appropriate permissions
+
+### Standard Deployment
+
+1. Build the Docker image:
+   docker build -t registry.clickit.internal/app-name:VERSION .
+
+2. Push to registry:
+   docker push registry.clickit.internal/app-name:VERSION
+
+3. Update the Helm values file:
+   Edit deploy/helm/values-production.yaml
+   Set image.tag to your VERSION
+
+4. Deploy via ArgoCD:
+   ArgoCD will automatically sync within 5 minutes, or trigger manually:
+   argocd app sync app-name --prune
+
+### Rollback
+To rollback to the previous version:
+  argocd app rollback app-name
+
+Or manually set the previous image tag in Helm values.
+
+---
+
+## Database Migrations
+
+Migrations run automatically as a Kubernetes Job before the deployment rollout.
+
+Migration files location: db/migrations/
+Format: YYYYMMDDHHMMSS_description.sql
+
+To run manually:
+  kubectl exec -it deploy/app-name -- rails db:migrate
+  (or the equivalent for your framework)
+
+WARNING: Always backup production data before running destructive migrations.
+
+---
+
+## Environment Variables
+
+All secrets are stored in AWS Secrets Manager under /prod/app-name/*.
+They are injected into pods via the External Secrets Operator.
+
+Do NOT store secrets in:
+- Code repositories
+- Kubernetes ConfigMaps
+- Docker images
+- Environment files committed to git
+
+To update a secret:
+  aws secretsmanager put-secret-value \
+    --secret-id /prod/app-name/DATABASE_URL \
+    --secret-string "postgres://user:password@host:5432/db"
+
+---
+
+## Monitoring and Alerts
+
+### CloudWatch Dashboards
+Main dashboard: https://us-east-1.console.aws.amazon.com/cloudwatch/...
+(Replace with your actual dashboard URL)
+
+### Alert Thresholds
+- API latency p95 > 500ms → PagerDuty alert
+- Error rate > 1% → Slack #incidents channel
+- CPU > 80% for 5 minutes → Slack #infra-alerts
+
+### Log Access
+Logs are in CloudWatch Log Groups:
+  /ecs/app-name/api
+  /ecs/app-name/worker
+
+Query with CloudWatch Insights:
+  fields @timestamp, @message
+  | filter @message like /ERROR/
+  | sort @timestamp desc
+  | limit 100
+
+---
+
+## On-Call Runbook
+
+### Service is down (HTTP 5xx)
+1. Check CloudWatch dashboard for error rate
+2. Check ECS service events: aws ecs describe-services ...
+3. Check recent deployments in ArgoCD
+4. If recent deployment is the cause: rollback immediately (see above)
+5. Escalate to team lead if not resolved in 15 minutes
+
+### High latency
+1. Check RDS metrics (CPU, connections, slow query log)
+2. Check ECS CPU/memory utilization
+3. Check Elasticache hit rate
+4. If database: enable slow query log and analyze
+
+### OOM errors
+1. Increase memory limit in Helm values
+2. Check for memory leaks (profiling required, consult dev team)
+3. Temporary fix: restart the service: kubectl rollout restart deploy/app-name

@@ -1,13 +1,13 @@
 schema_version: "1.0.0"
-template_id: "tpl.claude.prompt-pack.finops-summary"
-name: "Claude FinOps Summary Prompt Pack"
+template_id: "tpl.claude.prompt-pack.finops-summary-v0"
+name: "Claude FinOps Summary (deprecated)"
 slug: "finops-summary"
 platform: "claude"
 template_type: "prompt-pack"
 version: "0.1.0"
-status: "draft"
+status: "deprecated"
 language: ["es", "en"]
-summary: "Prompts para resumir costos cloud y recomendaciones ejecutivas."
+summary: "DEPRECATED. Reemplazado por tpl.claude.prompt-pack.finops-summary en templates/claude/prompt-packs/claude-prompt-pack-finops-summary/."
 owner:
   team: "clickit/bench-agentic"
   maintainers: ["@fen22"]
@@ -15,6 +15,8 @@ tags: ["claude", "finops", "prompt"]
 integrations: ["Claude"]
 artifacts:
   entrypoint: "src/prompt.md"
+  readme: "README.md"
+  env_example: ".env.example"
 secrets:
   required: []
   optional: []
@@ -23,7 +25,9 @@ runtime:
 validation:
   last_tested_at: null
   tested_by: null
+  evidence: []
 security:
   data_classification: "internal"
   pii_expected: false
   credentials_embedded: false
+  least_privilege_reviewed: false

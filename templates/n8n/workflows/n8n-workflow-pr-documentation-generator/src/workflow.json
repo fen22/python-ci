@@ -1,0 +1,190 @@
+{
+  "name": "PR Documentation Generator",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "github-pr-docs",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "wh-001-github",
+      "name": "GitHub PR Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [120, 300],
+      "webhookId": "f1e2d3c4-b5a6-9870-dcba-ef1234509876"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "typeValidation": "strict" },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.body.action }}",
+              "rightValue": "opened",
+              "operator": { "type": "string", "operation": "equals" }
+            },
+            {
+              "id": "c2",
+              "leftValue": "={{ $json.body.action }}",
+              "rightValue": "synchronize",
+              "operator": { "type": "string", "operation": "equals" }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "id": "if-002-filter",
+      "name": "Is PR Open/Updated?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [340, 300]
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            { "id": "e1", "name": "pr_number", "value": "={{ $('GitHub PR Webhook').item.json.body.pull_request.number }}", "type": "number" },
+            { "id": "e2", "name": "pr_title", "value": "={{ $('GitHub PR Webhook').item.json.body.pull_request.title }}", "type": "string" },
+            { "id": "e3", "name": "pr_body", "value": "={{ $('GitHub PR Webhook').item.json.body.pull_request.body || '' }}", "type": "string" },
+            { "id": "e4", "name": "pr_author", "value": "={{ $('GitHub PR Webhook').item.json.body.pull_request.user.login }}", "type": "string" },
+            { "id": "e5", "name": "pr_base_branch", "value": "={{ $('GitHub PR Webhook').item.json.body.pull_request.base.ref }}", "type": "string" },
+            { "id": "e6", "name": "pr_head_branch", "value": "={{ $('GitHub PR Webhook').item.json.body.pull_request.head.ref }}", "type": "string" },
+            { "id": "e7", "name": "repo_full_name", "value": "={{ $('GitHub PR Webhook').item.json.body.repository.full_name }}", "type": "string" },
+            { "id": "e8", "name": "pr_url", "value": "={{ $('GitHub PR Webhook').item.json.body.pull_request.html_url }}", "type": "string" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "set-003-extract",
+      "name": "Extract PR Metadata",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [560, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://api.github.com/repos/{{ $json.repo_full_name }}/pulls/{{ $json.pr_number }}/files",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "=Bearer {{ $env.GITHUB_TOKEN }}" },
+            { "name": "Accept", "value": "application/vnd.github.v3+json" },
+            { "name": "X-GitHub-Api-Version", "value": "2022-11-28" }
+          ]
+        },
+        "options": { "timeout": 30000 }
+      },
+      "id": "http-004-files",
+      "name": "Get PR Files",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [780, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const prMeta = $('Extract PR Metadata').first().json;\nconst files = $input.all();\n\n// Build file summary (patch limited to avoid token overflow)\nconst fileSummaries = files.map(f => {\n  const file = f.json;\n  const patch = (file.patch || '').substring(0, 500);\n  const patchPreview = patch ? `\\n  Diff preview:\\n  ${patch.split('\\n').slice(0, 15).join('\\n  ')}` : '';\n  return `- ${file.filename} (+${file.additions}/-${file.deletions} lines, status: ${file.status})${patchPreview}`;\n}).join('\\n');\n\nconst changedFiles = files.map(f => f.json.filename).join(', ');\nconst totalAdditions = files.reduce((s, f) => s + (f.json.additions || 0), 0);\nconst totalDeletions = files.reduce((s, f) => s + (f.json.deletions || 0), 0);\n\nreturn [{\n  json: {\n    pr_number: prMeta.pr_number,\n    pr_title: prMeta.pr_title,\n    pr_body: prMeta.pr_body,\n    pr_author: prMeta.pr_author,\n    pr_base_branch: prMeta.pr_base_branch,\n    pr_head_branch: prMeta.pr_head_branch,\n    repo_full_name: prMeta.repo_full_name,\n    pr_url: prMeta.pr_url,\n    changed_files: changedFiles,\n    total_files: files.length,\n    total_additions: totalAdditions,\n    total_deletions: totalDeletions,\n    file_summaries: fileSummaries\n  }\n}];"
+      },
+      "id": "code-005-build",
+      "name": "Build Context",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1000, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.LLM_API_URL || 'https://api.anthropic.com/v1/messages' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "x-api-key", "value": "={{ $env.LLM_API_KEY }}" },
+            { "name": "anthropic-version", "value": "2023-06-01" }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ model: $env.LLM_MODEL || 'claude-3-5-sonnet-20241022', max_tokens: 2000, system: 'You are a senior software engineer reviewing pull requests. Generate clear, technical, and actionable PR documentation in Markdown. Be honest about risks. Use GitHub-flavored Markdown.', messages: [{ role: 'user', content: `Generate complete PR documentation for the following pull request:\\n\\n**PR #${$json.pr_number}:** ${$json.pr_title}\\n**Author:** @${$json.pr_author}\\n**Branch:** ${$json.pr_head_branch} → ${$json.pr_base_branch}\\n**Original description:** ${$json.pr_body || '(no description provided)'}\\n\\n**Files changed (${$json.total_files} files, +${$json.total_additions}/-${$json.total_deletions}):**\\n${$json.file_summaries}\\n\\nGenerate the following sections in Markdown:\\n\\n## What does this PR do?\\n(2-3 sentence technical summary)\\n\\n## Why is this needed?\\n(business/technical motivation)\\n\\n## Changes overview\\n(bullet points per file or logical group)\\n\\n## Potential risks\\n(what could break, edge cases, migration concerns)\\n\\n## Review checklist\\n- [ ] (generated checklist specific to these changes)\\n\\n## Testing recommendations\\n(how to test this change)` }] }) }}",
+        "options": { "timeout": 90000 }
+      },
+      "id": "http-006-llm",
+      "name": "Generate PR Docs",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1220, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const llmResponse = $input.first().json;\nconst docText = llmResponse?.content?.[0]?.text || llmResponse?.choices?.[0]?.message?.content || 'Error generating documentation';\nconst ctx = $('Build Context').first().json;\n\nconst comment = `## 🤖 Auto-generated PR Documentation\\n\\n> Generated by [ClickIT PR Docs Bot](https://github.com/ClickITMx/clickit-agentic-low-code-templates) | n8n workflow\\n\\n${docText}\\n\\n---\\n*This documentation was generated automatically. Please review and update as needed.*`;\n\nreturn [{\n  json: {\n    repo: ctx.repo_full_name,\n    pr_number: ctx.pr_number,\n    comment_body: comment\n  }\n}];"
+      },
+      "id": "code-007-format",
+      "name": "Format Comment",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1440, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.github.com/repos/{{ $json.repo }}/issues/{{ $json.pr_number }}/comments",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "=Bearer {{ $env.GITHUB_TOKEN }}" },
+            { "name": "Accept", "value": "application/vnd.github.v3+json" },
+            { "name": "X-GitHub-Api-Version", "value": "2022-11-28" }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ body: $json.comment_body }) }}",
+        "options": {}
+      },
+      "id": "http-008-comment",
+      "name": "Post GitHub Comment",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1660, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\"status\":\"skipped\",\"reason\":\"PR action not relevant\"}",
+        "options": { "responseCode": 200 }
+      },
+      "id": "rw-009-skip",
+      "name": "Skip Non-Relevant Events",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [560, 500]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "GitHub PR Webhook": { "main": [[{ "node": "Is PR Open/Updated?", "type": "main", "index": 0 }]] },
+    "Is PR Open/Updated?": {
+      "main": [
+        [{ "node": "Extract PR Metadata", "type": "main", "index": 0 }],
+        [{ "node": "Skip Non-Relevant Events", "type": "main", "index": 0 }]
+      ]
+    },
+    "Extract PR Metadata": { "main": [[{ "node": "Get PR Files", "type": "main", "index": 0 }]] },
+    "Get PR Files": { "main": [[{ "node": "Build Context", "type": "main", "index": 0 }]] },
+    "Build Context": { "main": [[{ "node": "Generate PR Docs", "type": "main", "index": 0 }]] },
+    "Generate PR Docs": { "main": [[{ "node": "Format Comment", "type": "main", "index": 0 }]] },
+    "Format Comment": { "main": [[{ "node": "Post GitHub Comment", "type": "main", "index": 0 }]] }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "versionId": "f3g4h5i6-j7k8-l9m0-n1o2-555566667777",
+  "meta": { "templateCredsSetupCompleted": false, "instanceId": "" },
+  "id": "g4h5i6j7-k8l9-m0n1-o2p3-778899001122",
+  "tags": ["github", "pr", "documentation", "ai"]
+}

@@ -1,1 +1,217 @@
-{"name":"Cloud Cost Research","nodes":[],"connections":{}}
+{
+  "name": "Cloud Cost Research Workflow",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "trig-001-manual",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [120, 300]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "weeksInterval": 1,
+              "triggerAtDay": [1],
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      },
+      "id": "trig-002-schedule",
+      "name": "Weekly Schedule",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [120, 480]
+    },
+    {
+      "parameters": {
+        "jsCode": "const mode = $env.COST_DATA_MODE || 'csv_fixture';\nreturn [{ json: { mode } }];"
+      },
+      "id": "code-003-mode",
+      "name": "Select Data Source",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [340, 380]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "strict" },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.mode }}",
+              "rightValue": "aws",
+              "operator": { "type": "string", "operation": "equals" }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-004-mode",
+      "name": "AWS or Fixture?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [560, 380]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ce.us-east-1.amazonaws.com/GetCostAndUsage",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "X-Amz-Target", "value": "AWSInsightsIndexService.GetCostAndUsage" },
+            { "name": "Content-Type", "value": "application/x-amz-json-1.1" }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ TimePeriod: { Start: new Date(new Date().setDate(1)).toISOString().split('T')[0], End: new Date().toISOString().split('T')[0] }, Granularity: 'MONTHLY', Metrics: ['UnblendedCost'], GroupBy: [{ Type: 'DIMENSION', Key: 'SERVICE' }] }) }}",
+        "options": {}
+      },
+      "id": "http-005-aws",
+      "name": "AWS Cost Explorer",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [780, 260]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.CSV_FIXTURE_URL || 'https://raw.githubusercontent.com/ClickITMx/clickit-agentic-low-code-templates/main/templates/n8n/workflows/n8n-workflow-cloud-cost-research/src/fixtures/costs-dummy.csv' }}",
+        "options": {}
+      },
+      "id": "http-006-csv",
+      "name": "Load CSV Fixture",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [780, 500]
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\nlet services = [];\nlet currentPeriod = '';\nlet previousPeriod = '';\n\nif (input.ResultsByTime) {\n  // AWS Cost Explorer format\n  const results = input.ResultsByTime;\n  const latest = results[results.length - 1];\n  currentPeriod = `${latest.TimePeriod.Start} / ${latest.TimePeriod.End}`;\n  services = (latest.Groups || []).map(g => ({\n    name: g.Keys[0],\n    current: parseFloat(g.Metrics.UnblendedCost.Amount),\n    previous: 0,\n    currency: g.Metrics.UnblendedCost.Unit\n  }));\n} else {\n  // CSV fixture: raw text\n  const csvText = typeof input === 'string' ? input : (input.data || JSON.stringify(input));\n  const allLines = String(csvText).split('\\n');\n  const byService = {};\n  const periods = [];\n\n  for (const line of allLines) {\n    const trimmed = line.trim();\n    if (!trimmed || trimmed.startsWith('ServiceName')) continue;\n    const parts = trimmed.split(',');\n    if (parts.length < 3) continue;\n    const [svc, period, amt] = parts;\n    if (!periods.includes(period)) periods.push(period);\n    if (!byService[svc]) byService[svc] = {};\n    byService[svc][period] = parseFloat(amt) || 0;\n  }\n\n  const sorted = periods.sort();\n  currentPeriod = sorted[sorted.length - 1] || 'Apr 2025';\n  previousPeriod = sorted[sorted.length - 2] || 'Mar 2025';\n  services = Object.entries(byService).map(([name, p]) => ({\n    name,\n    current: p[currentPeriod] || 0,\n    previous: p[previousPeriod] || 0,\n    currency: 'USD'\n  }));\n}\n\nconst totalCurrent = services.reduce((s, r) => s + r.current, 0);\nconst totalPrevious = services.reduce((s, r) => s + r.previous, 0);\nconst deltaPercent = totalPrevious > 0 ? ((totalCurrent - totalPrevious) / totalPrevious * 100).toFixed(1) : 'N/A';\nconst topServices = [...services].sort((a, b) => b.current - a.current).slice(0, 5);\nconst threshold = parseFloat($env.COST_ALERT_THRESHOLD || '2000');\n\nreturn [{\n  json: {\n    summary: { currentPeriod, previousPeriod, totalCurrent: totalCurrent.toFixed(2), totalPrevious: totalPrevious.toFixed(2), deltaPercent, currency: 'USD' },\n    topServices,\n    allServices: services,\n    alertThreshold: threshold,\n    isOverThreshold: totalCurrent > threshold\n  }\n}];"
+      },
+      "id": "code-007-parse",
+      "name": "Parse Cost Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1000, 380]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.LLM_API_URL || 'https://api.anthropic.com/v1/messages' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "x-api-key", "value": "={{ $env.LLM_API_KEY }}" },
+            { "name": "anthropic-version", "value": "2023-06-01" }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ model: $env.LLM_MODEL || 'claude-3-5-sonnet-20241022', max_tokens: 1500, system: 'Eres un analista FinOps experto en AWS. Produce resúmenes ejecutivos concisos, orientados a acción, en español.', messages: [{ role: 'user', content: `Analiza los siguientes datos de costos cloud y genera un resumen ejecutivo:\\n\\nPeríodo actual: ${$json.summary.currentPeriod}\\nCosto total: $${$json.summary.totalCurrent} USD\\nCosto período anterior: $${$json.summary.totalPrevious} USD\\nVariación: ${$json.summary.deltaPercent}%\\n\\nTop 5 servicios:\\n${$json.topServices.map(s => '- ' + s.name + ': $' + s.current.toFixed(2) + ' (anterior: $' + s.previous.toFixed(2) + ')').join('\\n')}\\n\\nEntrega en este formato exacto:\\n1. RESUMEN EJECUTIVO (max 3 oraciones)\\n2. ANOMALÍAS DETECTADAS (bullet points, comparando con período anterior)\\n3. HIPÓTESIS DE CAUSAS\\n4. ACCIONES RECOMENDADAS (priorizadas por impacto)\\n5. RIESGOS SI NO SE ACTÚA` }] }) }}",
+        "options": { "timeout": 60000 }
+      },
+      "id": "http-008-llm",
+      "name": "Generate LLM Summary",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1220, 380]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "typeValidation": "strict" },
+          "conditions": [
+            {
+              "id": "c2",
+              "leftValue": "={{ $('Parse Cost Data').first().json.isOverThreshold }}",
+              "rightValue": true,
+              "operator": { "type": "boolean", "operation": "true" }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-009-threshold",
+      "name": "Over Budget?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1440, 380]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SLACK_WEBHOOK_URL }}",
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ text: ':warning: *FinOps Alert* — Costo cloud superó el threshold de $' + ($env.COST_ALERT_THRESHOLD || '2000') + ' USD', attachments: [{ color: 'danger', title: 'Período: ' + $('Parse Cost Data').first().json.summary.currentPeriod, text: '*Total:* $' + $('Parse Cost Data').first().json.summary.totalCurrent + ' USD\\n*Variación:* ' + $('Parse Cost Data').first().json.summary.deltaPercent + '%\\n\\n' + ($('Generate LLM Summary').first().json.content?.[0]?.text || '').substring(0, 900), footer: 'n8n Cloud Cost Research Workflow', mrkdwn_in: ['text'] }] }) }}",
+        "options": {}
+      },
+      "id": "http-010-alert",
+      "name": "Send Slack Alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1660, 260]
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            { "id": "r1", "name": "status", "value": "report_generated", "type": "string" },
+            { "id": "r2", "name": "period", "value": "={{ $('Parse Cost Data').first().json.summary.currentPeriod }}", "type": "string" },
+            { "id": "r3", "name": "total_cost_usd", "value": "={{ $('Parse Cost Data').first().json.summary.totalCurrent }}", "type": "string" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "set-011-output",
+      "name": "Archive Report",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [1660, 480]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Manual Trigger": { "main": [[{ "node": "Select Data Source", "type": "main", "index": 0 }]] },
+    "Weekly Schedule": { "main": [[{ "node": "Select Data Source", "type": "main", "index": 0 }]] },
+    "Select Data Source": { "main": [[{ "node": "AWS or Fixture?", "type": "main", "index": 0 }]] },
+    "AWS or Fixture?": {
+      "main": [
+        [{ "node": "AWS Cost Explorer", "type": "main", "index": 0 }],
+        [{ "node": "Load CSV Fixture", "type": "main", "index": 0 }]
+      ]
+    },
+    "AWS Cost Explorer": { "main": [[{ "node": "Parse Cost Data", "type": "main", "index": 0 }]] },
+    "Load CSV Fixture": { "main": [[{ "node": "Parse Cost Data", "type": "main", "index": 0 }]] },
+    "Parse Cost Data": { "main": [[{ "node": "Generate LLM Summary", "type": "main", "index": 0 }]] },
+    "Generate LLM Summary": { "main": [[{ "node": "Over Budget?", "type": "main", "index": 0 }]] },
+    "Over Budget?": {
+      "main": [
+        [{ "node": "Send Slack Alert", "type": "main", "index": 0 }],
+        [{ "node": "Archive Report", "type": "main", "index": 0 }]
+      ]
+    },
+    "Send Slack Alert": { "main": [[{ "node": "Archive Report", "type": "main", "index": 0 }]] }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "versionId": "d2e3f4a5-b6c7-d8e9-f0a1-222233334444",
+  "meta": { "templateCredsSetupCompleted": false, "instanceId": "" },
+  "id": "e3f4a5b6-c7d8-e9f0-a1b2-334455667788",
+  "tags": ["finops", "cloud-cost", "aws"]
+}

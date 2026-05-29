@@ -1,1 +1,95 @@
-{"mcpServers":{}}
+{
+  "_comment": "Claude MCP Infra Assistant — Configuración de ejemplo. Copiar como ~/.claude/mcp.json o agregar al CLAUDE.md del proyecto. NUNCA incluir tokens reales.",
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/path/to/infra/repo",
+        "--readonly"
+      ],
+      "_description": "Read-only access to infrastructure repository files. Change /path/to/infra/repo to your actual path.",
+      "_security": "Use --readonly flag always. Do NOT point to directories with secrets or credentials."
+    },
+    "github": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "PLACEHOLDER_GITHUB_TOKEN"
+      },
+      "_description": "Read-only GitHub access for PR/issue inspection. Use a token with minimal scopes: read:org, repo (read only).",
+      "_allowlist": [
+        "list_repositories",
+        "get_repository",
+        "list_pull_requests",
+        "get_pull_request",
+        "get_issue",
+        "list_issues",
+        "search_repositories",
+        "search_code"
+      ],
+      "_blocklist": [
+        "create_repository",
+        "delete_repository",
+        "merge_pull_request",
+        "close_issue",
+        "push_files"
+      ]
+    },
+    "aws-readonly": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-aws-kb-retrieval"
+      ],
+      "env": {
+        "AWS_ACCESS_KEY_ID": "PLACEHOLDER_AWS_KEY",
+        "AWS_SECRET_ACCESS_KEY": "PLACEHOLDER_AWS_SECRET",
+        "AWS_REGION": "us-east-1"
+      },
+      "_description": "AWS read-only access. Requires IAM policy with only describe/list/get actions (see security-guardrails.md).",
+      "_iam_policy_ref": "See security-guardrails.md for the minimal IAM policy to attach to this user/role."
+    },
+    "brave-search": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-brave-search"
+      ],
+      "env": {
+        "BRAVE_API_KEY": "PLACEHOLDER_BRAVE_KEY"
+      },
+      "_description": "Web search for infrastructure documentation, CVEs, and best practices.",
+      "_safe": true
+    }
+  },
+  "_human_approval_required": [
+    "Any action that creates, modifies, or deletes cloud resources",
+    "Any action that modifies repository contents (push, merge, delete branch)",
+    "Any action that changes IAM policies or security groups",
+    "Any action that stops, starts, or terminates compute instances",
+    "Any action on production environments"
+  ],
+  "_allowed_read_actions": [
+    "Describe running EC2 instances, RDS databases, EKS clusters",
+    "List S3 buckets and their properties (not contents)",
+    "Read CloudWatch metrics and alarms",
+    "Read Cost Explorer data",
+    "List CloudFormation stacks",
+    "Read GitHub PRs, issues, and repository structure",
+    "Read local infrastructure configuration files",
+    "Search for documentation and CVEs"
+  ],
+  "_prohibited_actions": [
+    "Terminate or stop any EC2 instance",
+    "Delete any resource (S3 bucket, RDS, etc.)",
+    "Modify security groups, NACLs, or IAM policies",
+    "Access secrets from AWS Secrets Manager or SSM Parameter Store",
+    "Execute arbitrary shell commands on remote systems",
+    "Merge or push to any branch without explicit human confirmation"
+  ]
+}

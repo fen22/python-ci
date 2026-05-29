@@ -1,4 +1,7 @@
 {
+  "template_id": "tpl.claude.mcp.infra-assistant",
   "status": "draft",
-  "evidence": []
+  "note": "Config JSON revisado. IAM policy documentada. No probado con infraestructura real de producción.",
+  "tests_run": [],
+  "last_updated": null
 }

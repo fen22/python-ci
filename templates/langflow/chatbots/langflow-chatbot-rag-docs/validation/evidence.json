@@ -1,4 +1,7 @@
 {
+  "template_id": "tpl.langflow.chatbot.rag-docs",
   "status": "draft",
-  "evidence": []
+  "note": "Flow JSON estructuralmente válido (8 nodos, 8 edges). No probado en Langflow real por limitación de entorno. Fixture de docs incluida.",
+  "tests_run": [],
+  "last_updated": null
 }

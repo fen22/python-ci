@@ -1,4 +1,7 @@
 {
+  "template_id": "tpl.n8n.workflow.cloud-cost-research",
   "status": "draft",
-  "evidence": []
+  "note": "Workflow importable. Fixture CSV revisado. Modo AWS no probado con credenciales reales.",
+  "tests_run": [],
+  "last_updated": null
 }

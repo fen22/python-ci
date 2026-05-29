@@ -1,0 +1,38 @@
+schema_version: "1.0.0"
+template_id: "tpl.n8n.chatbot.slack-engineering-docs"
+name: "n8n Slack Engineering Docs Bot"
+slug: "slack-engineering-docs"
+platform: "n8n"
+template_type: "chatbot"
+version: "0.1.0"
+status: "draft"
+language: ["es", "en"]
+summary: "Bot de Slack que responde preguntas sobre documentación interna de ingeniería usando un LLM configurable. Recibe slash commands, consulta una fuente documental vía HTTP y responde en el canal."
+owner:
+  team: "clickit/bench-agentic"
+  maintainers: ["@fen22"]
+tags: ["slack", "chatbot", "docs", "llm", "n8n"]
+integrations: ["Slack", "Anthropic Claude", "HTTP Docs Source"]
+artifacts:
+  entrypoint: "src/workflow.json"
+  readme: "README.md"
+  env_example: ".env.example"
+secrets:
+  required:
+    - SLACK_BOT_TOKEN
+    - LLM_API_KEY
+    - DOCS_SOURCE_URL
+  optional:
+    - LLM_MODEL
+    - LLM_API_URL
+runtime:
+  deployment_models: ["local", "cloud"]
+validation:
+  last_tested_at: null
+  tested_by: null
+  evidence: []
+security:
+  data_classification: "internal"
+  pii_expected: false
+  credentials_embedded: false
+  least_privilege_reviewed: false
