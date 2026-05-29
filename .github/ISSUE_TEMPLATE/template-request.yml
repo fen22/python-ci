@@ -1,0 +1,31 @@
+name: Nueva plantilla
+description: Proponer un nuevo template para la biblioteca
+title: "[template]: "
+labels: ["type:template-request", "needs-triage"]
+body:
+  - type: input
+    id: business_value
+    attributes:
+      label: Valor comercial
+      description: Problema que resuelve y para quién.
+    validations:
+      required: true
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Plataforma
+      options:
+        - n8n
+        - Zapier
+        - Langflow
+        - Claude
+        - MCP
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Criterios de aceptación
+    validations:
+      required: true
