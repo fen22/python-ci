@@ -1,0 +1,29 @@
+schema_version: "1.0.0"
+template_id: "tpl.n8n.chatbot.slack-docs"
+name: "Slack Docs Chatbot"
+slug: "slack-docs"
+platform: "n8n"
+template_type: "chatbot"
+version: "0.1.0"
+status: "draft"
+language: ["es", "en"]
+summary: "Bot de Slack para responder preguntas sobre documentación interna."
+owner:
+  team: "clickit/bench-agentic"
+  maintainers: ["@fen22"]
+tags: ["slack", "chatbot", "docs"]
+integrations: ["Slack", "LLM", "Docs"]
+artifacts:
+  entrypoint: "src/workflow.json"
+secrets:
+  required: ["SLACK_BOT_TOKEN", "LLM_API_KEY"]
+  optional: []
+runtime:
+  deployment_models: ["local", "cloud"]
+validation:
+  last_tested_at: null
+  tested_by: null
+security:
+  data_classification: "internal"
+  pii_expected: false
+  credentials_embedded: false

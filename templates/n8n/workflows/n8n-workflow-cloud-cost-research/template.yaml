@@ -1,0 +1,29 @@
+schema_version: "1.0.0"
+template_id: "tpl.n8n.workflow.cloud-cost-research"
+name: "Cloud Cost Research Workflow"
+slug: "cloud-cost-research"
+platform: "n8n"
+template_type: "workflow"
+version: "0.1.0"
+status: "draft"
+language: ["es", "en"]
+summary: "Workflow para investigar costos cloud y generar resumen FinOps."
+owner:
+  team: "clickit/bench-agentic"
+  maintainers: ["@fen22"]
+tags: ["finops", "cloud-cost", "research"]
+integrations: ["AWS", "Slack", "LLM"]
+artifacts:
+  entrypoint: "src/workflow.json"
+secrets:
+  required: ["AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY", "LLM_API_KEY"]
+  optional: []
+runtime:
+  deployment_models: ["local", "cloud"]
+validation:
+  last_tested_at: null
+  tested_by: null
+security:
+  data_classification: "internal"
+  pii_expected: false
+  credentials_embedded: false

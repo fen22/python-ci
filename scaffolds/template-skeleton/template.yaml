@@ -1,0 +1,29 @@
+schema_version: "1.0.0"
+template_id: "tpl.platform.type.slug"
+name: "Template name"
+slug: "slug"
+platform: "n8n"
+template_type: "workflow"
+version: "0.1.0"
+status: "draft"
+language: ["es", "en"]
+summary: "Short summary."
+owner:
+  team: "clickit/bench-agentic"
+  maintainers: ["@fen22"]
+tags: []
+integrations: []
+artifacts:
+  entrypoint: "src/main.json"
+secrets:
+  required: []
+  optional: []
+runtime:
+  deployment_models: ["local"]
+validation:
+  last_tested_at: null
+  tested_by: null
+security:
+  data_classification: "internal"
+  pii_expected: false
+  credentials_embedded: false

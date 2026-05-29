@@ -23,23 +23,55 @@
     "security"
   ],
   "properties": {
-    "schema_version": {"type": "string"},
-    "template_id": {"type": "string", "pattern": "^tpl\\.[a-z0-9-]+\\.[a-z0-9-]+\\.[a-z0-9-]+$"},
-    "name": {"type": "string"},
-    "slug": {"type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"},
-    "platform": {"type": "string", "enum": ["n8n", "langflow", "zapier", "claude", "others"]},
-    "template_type": {"type": "string", "enum": ["workflow", "chatbot", "infra-agent", "initial-setup", "prompt-pack", "skill", "mcp"]},
-    "version": {"type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$"},
-    "status": {"type": "string", "enum": ["draft", "bench-tested", "clickit-verified", "deprecated"]},
-    "language": {"type": "array", "items": {"type": "string"}},
-    "summary": {"type": "string"},
-    "owner": {"type": "object"},
-    "tags": {"type": "array", "items": {"type": "string"}},
-    "integrations": {"type": "array", "items": {"type": "string"}},
-    "artifacts": {"type": "object"},
-    "secrets": {"type": "object"},
-    "runtime": {"type": "object"},
-    "validation": {"type": "object"},
-    "security": {"type": "object"}
-  }
+    "schema_version": {
+      "type": "string"
+    },
+    "template_id": {
+      "type": "string",
+      "pattern": "^tpl\\.[a-z0-9-]+\\.[a-z0-9-]+\\.[a-z0-9-]+$"
+    },
+    "name": {
+      "type": "string"
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "platform": {
+      "type": "string",
+      "enum": [
+        "n8n",
+        "langflow",
+        "zapier",
+        "claude",
+        "others"
+      ]
+    },
+    "template_type": {
+      "type": "string",
+      "enum": [
+        "workflow",
+        "chatbot",
+        "infra-agent",
+        "initial-setup",
+        "prompt-pack",
+        "skill",
+        "mcp"
+      ]
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "bench-tested",
+        "clickit-verified",
+        "deprecated"
+      ]
+    }
+  },
+  "additionalProperties": true
 }

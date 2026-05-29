@@ -1,0 +1,29 @@
+schema_version: "1.0.0"
+template_id: "tpl.others.initial-setup.mac-windows-ai-devops-bootstrap"
+name: "AI DevOps Bootstrap"
+slug: "mac-windows-ai-devops-bootstrap"
+platform: "others"
+template_type: "initial-setup"
+version: "0.1.0"
+status: "draft"
+language: ["es", "en"]
+summary: "Bootstrap de herramientas AI/DevOps para macOS y Windows."
+owner:
+  team: "clickit/bench-agentic"
+  maintainers: ["@fen22"]
+tags: ["bootstrap", "devops", "ai-tools"]
+integrations: ["macOS", "Windows"]
+artifacts:
+  entrypoint: "src/README.md"
+secrets:
+  required: []
+  optional: []
+runtime:
+  deployment_models: ["local", "cloud"]
+validation:
+  last_tested_at: null
+  tested_by: null
+security:
+  data_classification: "internal"
+  pii_expected: false
+  credentials_embedded: false

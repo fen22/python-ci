@@ -1,0 +1,29 @@
+schema_version: "1.0.0"
+template_id: "tpl.claude.mcp.infra-assistant"
+name: "Claude MCP Infra Assistant"
+slug: "infra-assistant"
+platform: "claude"
+template_type: "mcp"
+version: "0.1.0"
+status: "draft"
+language: ["es", "en"]
+summary: "Config base para asistente de infraestructura vía MCP."
+owner:
+  team: "clickit/bench-agentic"
+  maintainers: ["@fen22"]
+tags: ["claude", "mcp", "infra"]
+integrations: ["Claude Code", "MCP"]
+artifacts:
+  entrypoint: "src/mcp-config.example.json"
+secrets:
+  required: []
+  optional: []
+runtime:
+  deployment_models: ["local", "cloud"]
+validation:
+  last_tested_at: null
+  tested_by: null
+security:
+  data_classification: "internal"
+  pii_expected: false
+  credentials_embedded: false
