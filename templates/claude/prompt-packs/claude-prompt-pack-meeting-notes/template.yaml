@@ -1,0 +1,38 @@
+schema_version: "1.0.0"
+template_id: "tpl.claude.prompt-pack.meeting-notes"
+name: "Claude Meeting Notes Summarizer"
+slug: "meeting-notes"
+platform: "claude"
+template_type: "prompt-pack"
+version: "0.1.0"
+status: "draft"
+language: ["en", "es"]
+summary: "Pack de prompts para resumir notas o transcripciones de reuniones. Genera resumen ejecutivo, decisiones tomadas, action items con responsables y fecha, y puntos de seguimiento. Usable en Claude.ai o API."
+owner:
+  team: "clickit/bench-agentic"
+  maintainers: ["@fen22"]
+tags: ["claude", "meeting", "summarizer", "prompt-pack", "productivity"]
+integrations: ["Claude API", "Claude.ai"]
+artifacts:
+  entrypoint: "src/prompt.md"
+  readme: "README.md"
+  env_example: ".env.example"
+attribution:
+  source: "Inspired by Anthropic Prompt Library"
+  url: "https://docs.anthropic.com/en/prompt-library/library"
+  license: "Free to use (Anthropic ToS)"
+secrets:
+  required: []
+  optional:
+    - ANTHROPIC_API_KEY
+runtime:
+  deployment_models: ["api", "claude.ai"]
+validation:
+  last_tested_at: null
+  tested_by: null
+  evidence: []
+security:
+  data_classification: "internal"
+  pii_expected: true
+  credentials_embedded: false
+  least_privilege_reviewed: true

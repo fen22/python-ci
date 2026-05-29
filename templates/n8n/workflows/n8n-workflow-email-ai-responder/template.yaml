@@ -1,0 +1,48 @@
+schema_version: "1.0.0"
+template_id: "tpl.n8n.workflow.email-ai-responder"
+name: "n8n Email AI Auto-Responder with RAG"
+slug: "email-ai-responder"
+platform: "n8n"
+template_type: "workflow"
+version: "0.1.0"
+status: "draft"
+language: ["en"]
+summary: "Workflow que monitorea un inbox IMAP, clasifica emails con IA, genera un borrador de respuesta usando RAG sobre conocimiento previo (Qdrant) y lo envía automáticamente. Incluye summarización, clasificación y redacción."
+owner:
+  team: "clickit/bench-agentic"
+  maintainers: ["@fen22"]
+tags: ["email", "rag", "automation", "imap", "openai", "qdrant", "n8n"]
+integrations: ["IMAP Email", "Qdrant", "OpenAI", "DeepSeek"]
+artifacts:
+  entrypoint: "src/workflow.json"
+  readme: "README.md"
+  env_example: ".env.example"
+attribution:
+  source: "enescingoz/awesome-n8n-templates"
+  url: "https://github.com/enescingoz/awesome-n8n-templates"
+  license: "CC BY 4.0"
+  author: "Enes Cingoz"
+secrets:
+  required:
+    - IMAP_HOST
+    - IMAP_USER
+    - IMAP_PASSWORD
+    - OPENAI_API_KEY
+    - QDRANT_URL
+    - QDRANT_API_KEY
+    - SMTP_HOST
+    - SMTP_USER
+    - SMTP_PASSWORD
+  optional:
+    - DEEPSEEK_API_KEY
+runtime:
+  deployment_models: ["local", "cloud"]
+validation:
+  last_tested_at: null
+  tested_by: null
+  evidence: []
+security:
+  data_classification: "confidential"
+  pii_expected: true
+  credentials_embedded: false
+  least_privilege_reviewed: false

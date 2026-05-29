@@ -1,0 +1,40 @@
+schema_version: "1.0.0"
+template_id: "tpl.n8n.workflow.meeting-action-items"
+name: "n8n Meeting Action Items Extractor"
+slug: "meeting-action-items"
+platform: "n8n"
+template_type: "workflow"
+version: "0.1.0"
+status: "draft"
+language: ["en"]
+summary: "Workflow que lee transcripciones de reuniones de Google Meet, extrae action items con IA (OpenAI), crea eventos de seguimiento en Google Calendar y envía un resumen a los asistentes."
+owner:
+  team: "clickit/bench-agentic"
+  maintainers: ["@fen22"]
+tags: ["meeting", "transcription", "action-items", "google-calendar", "openai", "n8n"]
+integrations: ["Google Calendar", "Google Meet", "OpenAI"]
+artifacts:
+  entrypoint: "src/workflow.json"
+  readme: "README.md"
+  env_example: ".env.example"
+attribution:
+  source: "enescingoz/awesome-n8n-templates"
+  url: "https://github.com/enescingoz/awesome-n8n-templates"
+  license: "CC BY 4.0"
+  author: "Enes Cingoz"
+secrets:
+  required:
+    - OPENAI_API_KEY
+    - GOOGLE_CALENDAR_CREDENTIALS
+  optional: []
+runtime:
+  deployment_models: ["local", "cloud"]
+validation:
+  last_tested_at: null
+  tested_by: null
+  evidence: []
+security:
+  data_classification: "internal"
+  pii_expected: true
+  credentials_embedded: false
+  least_privilege_reviewed: false

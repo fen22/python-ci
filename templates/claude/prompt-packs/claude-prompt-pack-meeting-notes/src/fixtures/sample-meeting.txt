@@ -1,0 +1,18 @@
+Sprint Planning — Engineering Team
+May 29, 2026 | 10:00am | Attendees: Ana (PM), Carlos (Backend), Maria (Frontend), Luis (DevOps)
+
+Quick recap of last sprint: shipped the auth refactor, still pending the rate limiting feature.
+
+Carlos says the rate limiter will take 3 more days. Ana confirmed the deadline is June 5.
+Luis needs to provision a new Redis instance for rate limiting — he'll do it today.
+
+Maria finished the dashboard redesign mockups. Ana approved them. Maria will start implementation Monday and estimates 5 days.
+
+Discussed the P0 bug from last week (login timeout on mobile). Carlos fixed it in the hotfix but needs to write a regression test. He'll do that by end of week.
+
+Ana: we have a demo with the client on June 10. Everything in this sprint needs to be done and deployed by June 8.
+Luis: deployment pipeline needs updating for the new Redis dependency. He'll update it this week too.
+
+Open question: should we use Redis Cluster or a single node? Luis will research costs and report back by Friday.
+
+Next sprint planning: June 12, same time.

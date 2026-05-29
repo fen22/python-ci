@@ -123,6 +123,74 @@
   },
   {
     "schema_version": "1.0.0",
+    "template_id": "tpl.claude.prompt-pack.code-review",
+    "name": "Claude Code Review Prompt Pack",
+    "slug": "code-review",
+    "platform": "claude",
+    "template_type": "prompt-pack",
+    "version": "0.1.0",
+    "status": "draft",
+    "language": [
+      "en",
+      "es"
+    ],
+    "summary": "Pack de prompts para code review técnico con Claude. Cubre bugs, seguridad, performance, legibilidad y mejores prácticas. Directamente usable en Claude.ai, Claude Code o API.",
+    "owner": {
+      "team": "clickit/bench-agentic",
+      "maintainers": [
+        "@fen22"
+      ]
+    },
+    "tags": [
+      "claude",
+      "code-review",
+      "prompt-pack",
+      "engineering",
+      "security"
+    ],
+    "integrations": [
+      "Claude API",
+      "Claude.ai",
+      "Claude Code"
+    ],
+    "artifacts": {
+      "entrypoint": "src/prompt.md",
+      "readme": "README.md",
+      "env_example": ".env.example"
+    },
+    "attribution": {
+      "source": "Inspired by Anthropic Prompt Library",
+      "url": "https://docs.anthropic.com/en/prompt-library/library",
+      "license": "Free to use (Anthropic ToS)"
+    },
+    "secrets": {
+      "required": [],
+      "optional": [
+        "ANTHROPIC_API_KEY"
+      ]
+    },
+    "runtime": {
+      "deployment_models": [
+        "api",
+        "claude.ai",
+        "claude-code"
+      ]
+    },
+    "validation": {
+      "last_tested_at": null,
+      "tested_by": null,
+      "evidence": []
+    },
+    "security": {
+      "data_classification": "internal",
+      "pii_expected": false,
+      "credentials_embedded": false,
+      "least_privilege_reviewed": true
+    },
+    "path": "templates/claude/prompt-packs/claude-prompt-pack-code-review"
+  },
+  {
+    "schema_version": "1.0.0",
     "template_id": "tpl.claude.prompt-pack.doc-qa",
     "name": "Claude Doc Q&A Prompt Pack",
     "slug": "doc-qa",
@@ -248,6 +316,137 @@
   },
   {
     "schema_version": "1.0.0",
+    "template_id": "tpl.claude.prompt-pack.meeting-notes",
+    "name": "Claude Meeting Notes Summarizer",
+    "slug": "meeting-notes",
+    "platform": "claude",
+    "template_type": "prompt-pack",
+    "version": "0.1.0",
+    "status": "draft",
+    "language": [
+      "en",
+      "es"
+    ],
+    "summary": "Pack de prompts para resumir notas o transcripciones de reuniones. Genera resumen ejecutivo, decisiones tomadas, action items con responsables y fecha, y puntos de seguimiento. Usable en Claude.ai o API.",
+    "owner": {
+      "team": "clickit/bench-agentic",
+      "maintainers": [
+        "@fen22"
+      ]
+    },
+    "tags": [
+      "claude",
+      "meeting",
+      "summarizer",
+      "prompt-pack",
+      "productivity"
+    ],
+    "integrations": [
+      "Claude API",
+      "Claude.ai"
+    ],
+    "artifacts": {
+      "entrypoint": "src/prompt.md",
+      "readme": "README.md",
+      "env_example": ".env.example"
+    },
+    "attribution": {
+      "source": "Inspired by Anthropic Prompt Library",
+      "url": "https://docs.anthropic.com/en/prompt-library/library",
+      "license": "Free to use (Anthropic ToS)"
+    },
+    "secrets": {
+      "required": [],
+      "optional": [
+        "ANTHROPIC_API_KEY"
+      ]
+    },
+    "runtime": {
+      "deployment_models": [
+        "api",
+        "claude.ai"
+      ]
+    },
+    "validation": {
+      "last_tested_at": null,
+      "tested_by": null,
+      "evidence": []
+    },
+    "security": {
+      "data_classification": "internal",
+      "pii_expected": true,
+      "credentials_embedded": false,
+      "least_privilege_reviewed": true
+    },
+    "path": "templates/claude/prompt-packs/claude-prompt-pack-meeting-notes"
+  },
+  {
+    "schema_version": "1.0.0",
+    "template_id": "tpl.langflow.chatbot.memory-chatbot",
+    "name": "Langflow Memory Chatbot",
+    "slug": "memory-chatbot",
+    "platform": "langflow",
+    "template_type": "chatbot",
+    "version": "0.1.0",
+    "status": "draft",
+    "language": [
+      "en"
+    ],
+    "summary": "Chatbot con memoria de conversación persistente. Flow oficial de Langflow con ChatInput, Message History y ChatOutput.",
+    "owner": {
+      "team": "clickit/bench-agentic",
+      "maintainers": [
+        "@fen22"
+      ]
+    },
+    "tags": [
+      "langflow",
+      "memory-chatbot"
+    ],
+    "integrations": [
+      "Langflow",
+      "OpenAI"
+    ],
+    "artifacts": {
+      "entrypoint": "src/flow.json",
+      "readme": "README.md",
+      "env_example": ".env.example"
+    },
+    "attribution": {
+      "source": "langflow-ai/langflow",
+      "url": "https://github.com/langflow-ai/langflow",
+      "license": "MIT",
+      "author": "Langflow team"
+    },
+    "secrets": {
+      "required": [
+        "OPENAI_API_KEY"
+      ],
+      "optional": [
+        "ANTHROPIC_API_KEY"
+      ]
+    },
+    "runtime": {
+      "deployment_models": [
+        "local",
+        "cloud"
+      ]
+    },
+    "validation": {
+      "last_tested_at": null,
+      "tested_by": null,
+      "evidence": []
+    },
+    "security": {
+      "data_classification": "internal",
+      "pii_expected": false,
+      "credentials_embedded": false,
+      "least_privilege_reviewed": false
+    },
+    "path": "templates/langflow/chatbots/langflow-chatbot-memory-chatbot"
+  },
+  {
+    "schema_version": "1.0.0",
     "template_id": "tpl.langflow.chatbot.rag-docs",
     "name": "Langflow RAG Docs Chatbot",
     "slug": "rag-docs",
@@ -311,6 +510,71 @@
       "least_privilege_reviewed": false
     },
     "path": "templates/langflow/chatbots/langflow-chatbot-rag-docs"
+  },
+  {
+    "schema_version": "1.0.0",
+    "template_id": "tpl.langflow.chatbot.vector-store-rag",
+    "name": "Langflow Vector Store RAG",
+    "slug": "vector-store-rag",
+    "platform": "langflow",
+    "template_type": "chatbot",
+    "version": "0.1.0",
+    "status": "draft",
+    "language": [
+      "en"
+    ],
+    "summary": "Chatbot RAG completo con vector store configurable (Chroma, FAISS, Pinecone). Flow oficial de Langflow.",
+    "owner": {
+      "team": "clickit/bench-agentic",
+      "maintainers": [
+        "@fen22"
+      ]
+    },
+    "tags": [
+      "langflow",
+      "vector-store-rag"
+    ],
+    "integrations": [
+      "Langflow",
+      "OpenAI"
+    ],
+    "artifacts": {
+      "entrypoint": "src/flow.json",
+      "readme": "README.md",
+      "env_example": ".env.example"
+    },
+    "attribution": {
+      "source": "langflow-ai/langflow",
+      "url": "https://github.com/langflow-ai/langflow",
+      "license": "MIT",
+      "author": "Langflow team"
+    },
+    "secrets": {
+      "required": [
+        "OPENAI_API_KEY"
+      ],
+      "optional": [
+        "ANTHROPIC_API_KEY"
+      ]
+    },
+    "runtime": {
+      "deployment_models": [
+        "local",
+        "cloud"
+      ]
+    },
+    "validation": {
+      "last_tested_at": null,
+      "tested_by": null,
+      "evidence": []
+    },
+    "security": {
+      "data_classification": "internal",
+      "pii_expected": false,
+      "credentials_embedded": false,
+      "least_privilege_reviewed": false
+    },
+    "path": "templates/langflow/chatbots/langflow-chatbot-vector-store-rag"
   },
   {
     "schema_version": "1.0.0",
@@ -378,6 +642,136 @@
       "least_privilege_reviewed": true
     },
     "path": "templates/langflow/infra-agents/langflow-infra-mcp-orchestrator"
+  },
+  {
+    "schema_version": "1.0.0",
+    "template_id": "tpl.langflow.workflow.financial-report-parser",
+    "name": "Langflow Financial Report Parser",
+    "slug": "financial-report-parser",
+    "platform": "langflow",
+    "template_type": "workflow",
+    "version": "0.1.0",
+    "status": "draft",
+    "language": [
+      "en"
+    ],
+    "summary": "Parsea reportes financieros PDF y extrae métricas clave usando un LLM. Flow oficial de Langflow, ideal para FinOps.",
+    "owner": {
+      "team": "clickit/bench-agentic",
+      "maintainers": [
+        "@fen22"
+      ]
+    },
+    "tags": [
+      "langflow",
+      "financial-report-parser"
+    ],
+    "integrations": [
+      "Langflow",
+      "OpenAI"
+    ],
+    "artifacts": {
+      "entrypoint": "src/flow.json",
+      "readme": "README.md",
+      "env_example": ".env.example"
+    },
+    "attribution": {
+      "source": "langflow-ai/langflow",
+      "url": "https://github.com/langflow-ai/langflow",
+      "license": "MIT",
+      "author": "Langflow team"
+    },
+    "secrets": {
+      "required": [
+        "OPENAI_API_KEY"
+      ],
+      "optional": [
+        "ANTHROPIC_API_KEY"
+      ]
+    },
+    "runtime": {
+      "deployment_models": [
+        "local",
+        "cloud"
+      ]
+    },
+    "validation": {
+      "last_tested_at": null,
+      "tested_by": null,
+      "evidence": []
+    },
+    "security": {
+      "data_classification": "internal",
+      "pii_expected": false,
+      "credentials_embedded": false,
+      "least_privilege_reviewed": false
+    },
+    "path": "templates/langflow/workflows/langflow-workflow-financial-report-parser"
+  },
+  {
+    "schema_version": "1.0.0",
+    "template_id": "tpl.langflow.workflow.research-agent",
+    "name": "Langflow Research Agent",
+    "slug": "research-agent",
+    "platform": "langflow",
+    "template_type": "workflow",
+    "version": "0.1.0",
+    "status": "draft",
+    "language": [
+      "en"
+    ],
+    "summary": "Agente autónomo de investigación que busca información en la web y sintetiza hallazgos. Flow oficial de Langflow.",
+    "owner": {
+      "team": "clickit/bench-agentic",
+      "maintainers": [
+        "@fen22"
+      ]
+    },
+    "tags": [
+      "langflow",
+      "research-agent"
+    ],
+    "integrations": [
+      "Langflow",
+      "OpenAI"
+    ],
+    "artifacts": {
+      "entrypoint": "src/flow.json",
+      "readme": "README.md",
+      "env_example": ".env.example"
+    },
+    "attribution": {
+      "source": "langflow-ai/langflow",
+      "url": "https://github.com/langflow-ai/langflow",
+      "license": "MIT",
+      "author": "Langflow team"
+    },
+    "secrets": {
+      "required": [
+        "OPENAI_API_KEY"
+      ],
+      "optional": [
+        "ANTHROPIC_API_KEY"
+      ]
+    },
+    "runtime": {
+      "deployment_models": [
+        "local",
+        "cloud"
+      ]
+    },
+    "validation": {
+      "last_tested_at": null,
+      "tested_by": null,
+      "evidence": []
+    },
+    "security": {
+      "data_classification": "internal",
+      "pii_expected": false,
+      "credentials_embedded": false,
+      "least_privilege_reviewed": false
+    },
+    "path": "templates/langflow/workflows/langflow-workflow-research-agent"
   },
   {
     "schema_version": "1.0.0",
@@ -577,6 +971,227 @@
   },
   {
     "schema_version": "1.0.0",
+    "template_id": "tpl.n8n.workflow.email-ai-responder",
+    "name": "n8n Email AI Auto-Responder with RAG",
+    "slug": "email-ai-responder",
+    "platform": "n8n",
+    "template_type": "workflow",
+    "version": "0.1.0",
+    "status": "draft",
+    "language": [
+      "en"
+    ],
+    "summary": "Workflow que monitorea un inbox IMAP, clasifica emails con IA, genera un borrador de respuesta usando RAG sobre conocimiento previo (Qdrant) y lo envía automáticamente. Incluye summarización, clasificación y redacción.",
+    "owner": {
+      "team": "clickit/bench-agentic",
+      "maintainers": [
+        "@fen22"
+      ]
+    },
+    "tags": [
+      "email",
+      "rag",
+      "automation",
+      "imap",
+      "openai",
+      "qdrant",
+      "n8n"
+    ],
+    "integrations": [
+      "IMAP Email",
+      "Qdrant",
+      "OpenAI",
+      "DeepSeek"
+    ],
+    "artifacts": {
+      "entrypoint": "src/workflow.json",
+      "readme": "README.md",
+      "env_example": ".env.example"
+    },
+    "attribution": {
+      "source": "enescingoz/awesome-n8n-templates",
+      "url": "https://github.com/enescingoz/awesome-n8n-templates",
+      "license": "CC BY 4.0",
+      "author": "Enes Cingoz"
+    },
+    "secrets": {
+      "required": [
+        "IMAP_HOST",
+        "IMAP_USER",
+        "IMAP_PASSWORD",
+        "OPENAI_API_KEY",
+        "QDRANT_URL",
+        "QDRANT_API_KEY",
+        "SMTP_HOST",
+        "SMTP_USER",
+        "SMTP_PASSWORD"
+      ],
+      "optional": [
+        "DEEPSEEK_API_KEY"
+      ]
+    },
+    "runtime": {
+      "deployment_models": [
+        "local",
+        "cloud"
+      ]
+    },
+    "validation": {
+      "last_tested_at": null,
+      "tested_by": null,
+      "evidence": []
+    },
+    "security": {
+      "data_classification": "confidential",
+      "pii_expected": true,
+      "credentials_embedded": false,
+      "least_privilege_reviewed": false
+    },
+    "path": "templates/n8n/workflows/n8n-workflow-email-ai-responder"
+  },
+  {
+    "schema_version": "1.0.0",
+    "template_id": "tpl.n8n.workflow.meeting-action-items",
+    "name": "n8n Meeting Action Items Extractor",
+    "slug": "meeting-action-items",
+    "platform": "n8n",
+    "template_type": "workflow",
+    "version": "0.1.0",
+    "status": "draft",
+    "language": [
+      "en"
+    ],
+    "summary": "Workflow que lee transcripciones de reuniones de Google Meet, extrae action items con IA (OpenAI), crea eventos de seguimiento en Google Calendar y envía un resumen a los asistentes.",
+    "owner": {
+      "team": "clickit/bench-agentic",
+      "maintainers": [
+        "@fen22"
+      ]
+    },
+    "tags": [
+      "meeting",
+      "transcription",
+      "action-items",
+      "google-calendar",
+      "openai",
+      "n8n"
+    ],
+    "integrations": [
+      "Google Calendar",
+      "Google Meet",
+      "OpenAI"
+    ],
+    "artifacts": {
+      "entrypoint": "src/workflow.json",
+      "readme": "README.md",
+      "env_example": ".env.example"
+    },
+    "attribution": {
+      "source": "enescingoz/awesome-n8n-templates",
+      "url": "https://github.com/enescingoz/awesome-n8n-templates",
+      "license": "CC BY 4.0",
+      "author": "Enes Cingoz"
+    },
+    "secrets": {
+      "required": [
+        "OPENAI_API_KEY",
+        "GOOGLE_CALENDAR_CREDENTIALS"
+      ],
+      "optional": []
+    },
+    "runtime": {
+      "deployment_models": [
+        "local",
+        "cloud"
+      ]
+    },
+    "validation": {
+      "last_tested_at": null,
+      "tested_by": null,
+      "evidence": []
+    },
+    "security": {
+      "data_classification": "internal",
+      "pii_expected": true,
+      "credentials_embedded": false,
+      "least_privilege_reviewed": false
+    },
+    "path": "templates/n8n/workflows/n8n-workflow-meeting-action-items"
+  },
+  {
+    "schema_version": "1.0.0",
+    "template_id": "tpl.n8n.workflow.pdf-qa",
+    "name": "n8n PDF Q&A with Citations",
+    "slug": "pdf-qa",
+    "platform": "n8n",
+    "template_type": "workflow",
+    "version": "0.1.0",
+    "status": "draft",
+    "language": [
+      "en"
+    ],
+    "summary": "Chatbot que carga un PDF desde Google Drive, lo indexa en Pinecone con embeddings de OpenAI, y responde preguntas citando los fragmentos exactos del documento fuente.",
+    "owner": {
+      "team": "clickit/bench-agentic",
+      "maintainers": [
+        "@fen22"
+      ]
+    },
+    "tags": [
+      "pdf",
+      "rag",
+      "chatbot",
+      "pinecone",
+      "openai",
+      "citations",
+      "n8n"
+    ],
+    "integrations": [
+      "Google Drive",
+      "Pinecone",
+      "OpenAI"
+    ],
+    "artifacts": {
+      "entrypoint": "src/workflow.json",
+      "readme": "README.md",
+      "env_example": ".env.example"
+    },
+    "attribution": {
+      "source": "enescingoz/awesome-n8n-templates",
+      "url": "https://github.com/enescingoz/awesome-n8n-templates",
+      "license": "CC BY 4.0",
+      "author": "Enes Cingoz"
+    },
+    "secrets": {
+      "required": [
+        "OPENAI_API_KEY",
+        "PINECONE_API_KEY",
+        "PINECONE_INDEX",
+        "GOOGLE_DRIVE_FILE_ID"
+      ],
+      "optional": []
+    },
+    "runtime": {
+      "deployment_models": [
+        "local",
+        "cloud"
+      ]
+    },
+    "validation": {
+      "last_tested_at": null,
+      "tested_by": null,
+      "evidence": []
+    },
+    "security": {
+      "data_classification": "internal",
+      "pii_expected": false,
+      "credentials_embedded": false,
+      "least_privilege_reviewed": false
+    },
+    "path": "templates/n8n/workflows/n8n-workflow-pdf-qa"
+  },
+  {
+    "schema_version": "1.0.0",
     "template_id": "tpl.n8n.workflow.pr-documentation-generator",
     "name": "n8n PR Documentation Generator",
     "slug": "pr-documentation-generator",
@@ -640,6 +1255,72 @@
       "least_privilege_reviewed": false
     },
     "path": "templates/n8n/workflows/n8n-workflow-pr-documentation-generator"
+  },
+  {
+    "schema_version": "1.0.0",
+    "template_id": "tpl.n8n.workflow.youtube-summarizer",
+    "name": "n8n YouTube Video Summarizer",
+    "slug": "youtube-summarizer",
+    "platform": "n8n",
+    "template_type": "workflow",
+    "version": "0.1.0",
+    "status": "draft",
+    "language": [
+      "en"
+    ],
+    "summary": "Workflow que recibe una URL de YouTube, descarga la transcripción y genera un resumen ejecutivo con puntos clave usando un LLM.",
+    "owner": {
+      "team": "clickit/bench-agentic",
+      "maintainers": [
+        "@fen22"
+      ]
+    },
+    "tags": [
+      "youtube",
+      "summarizer",
+      "transcription",
+      "llm",
+      "n8n"
+    ],
+    "integrations": [
+      "YouTube Transcript API",
+      "OpenAI"
+    ],
+    "artifacts": {
+      "entrypoint": "src/workflow.json",
+      "readme": "README.md",
+      "env_example": ".env.example"
+    },
+    "attribution": {
+      "source": "enescingoz/awesome-n8n-templates",
+      "url": "https://github.com/enescingoz/awesome-n8n-templates",
+      "license": "CC BY 4.0",
+      "author": "Enes Cingoz"
+    },
+    "secrets": {
+      "required": [
+        "OPENAI_API_KEY"
+      ],
+      "optional": []
+    },
+    "runtime": {
+      "deployment_models": [
+        "local",
+        "cloud"
+      ]
+    },
+    "validation": {
+      "last_tested_at": null,
+      "tested_by": null,
+      "evidence": []
+    },
+    "security": {
+      "data_classification": "public",
+      "pii_expected": false,
+      "credentials_embedded": false,
+      "least_privilege_reviewed": false
+    },
+    "path": "templates/n8n/workflows/n8n-workflow-youtube-summarizer"
   },
   {
     "schema_version": "1.0.0",

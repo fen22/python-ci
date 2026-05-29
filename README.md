@@ -26,18 +26,54 @@ cat catalog/stats.json
 
 | Template | Plataforma | Estado | Descripción |
 |---|---|---|---|
-| [Slack Engineering Docs Bot](templates/n8n/chatbots/n8n-chatbot-slack-engineering-docs/) | n8n | `draft` | Bot de Slack que responde preguntas sobre docs internos vía LLM |
-| [Cloud Cost Research](templates/n8n/workflows/n8n-workflow-cloud-cost-research/) | n8n | `draft` | Obtiene costos AWS, genera análisis FinOps con LLM y alerta a Slack |
-| [PR Documentation Generator](templates/n8n/workflows/n8n-workflow-pr-documentation-generator/) | n8n | `draft` | GitHub PR webhook → LLM → publica documentación técnica como comentario |
-| [RAG Docs Chatbot](templates/langflow/chatbots/langflow-chatbot-rag-docs/) | Langflow | `draft` | Chatbot RAG sobre documentación técnica con Chroma + Claude |
-| [Infra MCP Orchestrator](templates/langflow/infra-agents/langflow-infra-mcp-orchestrator/) | Langflow | `draft` | Blueprint de agente de infraestructura read-only (requiere Custom Components) |
-| [FinOps Alerting](templates/zapier/workflows/zapier-workflow-finops-alerting/) | Zapier | `draft` | Blueprint paso a paso para alertas de costos cloud (no importable — limitación de Zapier) |
-| [Doc Q&A Prompt Pack](templates/claude/prompt-packs/claude-prompt-pack-doc-qa/) | Claude | `draft` | Prompts para Q&A sobre documentación técnica — usable directamente en Claude.ai |
-| [FinOps Summary Prompt Pack](templates/claude/prompt-packs/claude-prompt-pack-finops-summary/) | Claude | `draft` | Prompts para análisis ejecutivo de costos cloud en español |
-| [MCP Infra Assistant](templates/claude/mcp/claude-mcp-infra-assistant/) | Claude | `draft` | Config MCP read-only para Claude Code con IAM policy mínima y guardrails |
-| [AI DevOps Bootstrap](templates/others/initial-setup/others-initial-setup-ai-devops-bootstrap/) | Others | `draft` | Scripts macOS/Windows para instalar Git, Python, Node, Docker, Claude Code, n8n |
+### n8n (7 workflows)
 
-> **Leyenda de estados:** `draft` = importable pero no probado con credenciales reales · `bench-tested` = probado manualmente con datos dummy · `clickit-verified` = listo para reutilización interna seria
+| Template | Estado | Descripción |
+|---|---|---|
+| [Slack Engineering Docs Bot](templates/n8n/chatbots/n8n-chatbot-slack-engineering-docs/) | `draft` | Bot de Slack que responde preguntas sobre docs internos vía LLM |
+| [Cloud Cost Research](templates/n8n/workflows/n8n-workflow-cloud-cost-research/) | `draft` | Costos AWS → análisis FinOps con LLM → alerta Slack. Incluye fixture CSV |
+| [PR Documentation Generator](templates/n8n/workflows/n8n-workflow-pr-documentation-generator/) | `draft` | GitHub PR webhook → LLM → comentario con docs técnicas auto-generadas |
+| [Email AI Auto-Responder](templates/n8n/workflows/n8n-workflow-email-ai-responder/) | `draft` | IMAP inbox → clasificar → RAG (Qdrant) → redactar y enviar respuesta |
+| [PDF Q&A with Citations](templates/n8n/workflows/n8n-workflow-pdf-qa/) | `draft` | PDF de Drive → Pinecone → chatbot que cita las fuentes exactas |
+| [Meeting Action Items](templates/n8n/workflows/n8n-workflow-meeting-action-items/) | `draft` | Transcripción de Google Meet → AI Agent → action items + calendario |
+| [YouTube Summarizer](templates/n8n/workflows/n8n-workflow-youtube-summarizer/) | `draft` | URL de YouTube → transcripción → resumen ejecutivo con LLM |
+
+### Langflow (6 flows)
+
+| Template | Estado | Descripción |
+|---|---|---|
+| [RAG Docs Chatbot](templates/langflow/chatbots/langflow-chatbot-rag-docs/) | `draft` | Chatbot RAG sobre docs técnicas con Chroma + Claude |
+| [Memory Chatbot](templates/langflow/chatbots/langflow-chatbot-memory-chatbot/) | `draft` | Chatbot con memoria persistente — flow oficial Langflow (MIT) |
+| [Vector Store RAG](templates/langflow/chatbots/langflow-chatbot-vector-store-rag/) | `draft` | RAG completo con vector store configurable — flow oficial Langflow (MIT) |
+| [Financial Report Parser](templates/langflow/workflows/langflow-workflow-financial-report-parser/) | `draft` | Parsea reportes financieros PDF y extrae métricas — flow oficial Langflow (MIT) |
+| [Research Agent](templates/langflow/workflows/langflow-workflow-research-agent/) | `draft` | Agente autónomo de investigación web — flow oficial Langflow (MIT) |
+| [Infra MCP Orchestrator](templates/langflow/infra-agents/langflow-infra-mcp-orchestrator/) | `draft` | Blueprint de agente de infra read-only (requiere Custom Components) |
+
+### Zapier (1 blueprint)
+
+| Template | Estado | Descripción |
+|---|---|---|
+| [FinOps Alerting](templates/zapier/workflows/zapier-workflow-finops-alerting/) | `draft` | Blueprint paso a paso para alertas de costos cloud (no importable — limitación de Zapier) |
+
+### Claude (5 prompt packs + 1 MCP)
+
+| Template | Estado | Descripción |
+|---|---|---|
+| [Doc Q&A](templates/claude/prompt-packs/claude-prompt-pack-doc-qa/) | `draft` | Q&A sobre docs técnicas — usable directamente en Claude.ai |
+| [FinOps Summary](templates/claude/prompt-packs/claude-prompt-pack-finops-summary/) | `draft` | Análisis ejecutivo de costos cloud en español, acepta CSV/JSON/texto |
+| [Code Review](templates/claude/prompt-packs/claude-prompt-pack-code-review/) | `draft` | Code review con severidades (CRITICAL/HIGH/MEDIUM/LOW) y sugerencias concretas |
+| [Meeting Notes](templates/claude/prompt-packs/claude-prompt-pack-meeting-notes/) | `draft` | Notas de reunión → resumen + decisiones + action items con owner y fecha |
+| [MCP Infra Assistant](templates/claude/mcp/claude-mcp-infra-assistant/) | `draft` | Config MCP read-only para Claude Code con IAM policy mínima y guardrails |
+
+### Others (1 script)
+
+| Template | Estado | Descripción |
+|---|---|---|
+| [AI DevOps Bootstrap](templates/others/initial-setup/others-initial-setup-ai-devops-bootstrap/) | `draft` | Scripts macOS/Windows para instalar Git, Python, Node, Docker, Claude Code, n8n |
+
+> **Leyenda:** `draft` = importable, no probado con credenciales reales · `bench-tested` = probado con datos dummy · `clickit-verified` = listo para reutilización interna seria
+
+> **Atribución:** Los flows de Langflow son del repo oficial [langflow-ai/langflow](https://github.com/langflow-ai/langflow) (MIT). Los workflows n8n de Email, PDF, Meeting y YouTube son de [enescingoz/awesome-n8n-templates](https://github.com/enescingoz/awesome-n8n-templates) (CC BY 4.0, autor: Enes Cingoz). Los prompts de Claude están inspirados en la [Anthropic Prompt Library](https://docs.anthropic.com/en/prompt-library/library).
 
 ## Cómo usar un template
 

@@ -1,0 +1,38 @@
+schema_version: "1.0.0"
+template_id: "tpl.claude.prompt-pack.code-review"
+name: "Claude Code Review Prompt Pack"
+slug: "code-review"
+platform: "claude"
+template_type: "prompt-pack"
+version: "0.1.0"
+status: "draft"
+language: ["en", "es"]
+summary: "Pack de prompts para code review técnico con Claude. Cubre bugs, seguridad, performance, legibilidad y mejores prácticas. Directamente usable en Claude.ai, Claude Code o API."
+owner:
+  team: "clickit/bench-agentic"
+  maintainers: ["@fen22"]
+tags: ["claude", "code-review", "prompt-pack", "engineering", "security"]
+integrations: ["Claude API", "Claude.ai", "Claude Code"]
+artifacts:
+  entrypoint: "src/prompt.md"
+  readme: "README.md"
+  env_example: ".env.example"
+attribution:
+  source: "Inspired by Anthropic Prompt Library"
+  url: "https://docs.anthropic.com/en/prompt-library/library"
+  license: "Free to use (Anthropic ToS)"
+secrets:
+  required: []
+  optional:
+    - ANTHROPIC_API_KEY
+runtime:
+  deployment_models: ["api", "claude.ai", "claude-code"]
+validation:
+  last_tested_at: null
+  tested_by: null
+  evidence: []
+security:
+  data_classification: "internal"
+  pii_expected: false
+  credentials_embedded: false
+  least_privilege_reviewed: true

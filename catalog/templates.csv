@@ -1,14 +1,24 @@
 template_id,name,platform,template_type,version,status,path
 tpl.claude.mcp.infra-assistant,Claude MCP Infra Assistant,claude,mcp,0.1.0,draft,templates/claude/mcp/claude-mcp-infra-assistant
 tpl.claude.prompt-pack.finops-summary-v0,Claude FinOps Summary (deprecated),claude,prompt-pack,0.1.0,deprecated,templates/claude/prompt-packs/claude-finops-summary
+tpl.claude.prompt-pack.code-review,Claude Code Review Prompt Pack,claude,prompt-pack,0.1.0,draft,templates/claude/prompt-packs/claude-prompt-pack-code-review
 tpl.claude.prompt-pack.doc-qa,Claude Doc Q&A Prompt Pack,claude,prompt-pack,0.1.0,draft,templates/claude/prompt-packs/claude-prompt-pack-doc-qa
 tpl.claude.prompt-pack.finops-summary,Claude FinOps Summary Prompt Pack,claude,prompt-pack,0.1.0,draft,templates/claude/prompt-packs/claude-prompt-pack-finops-summary
+tpl.claude.prompt-pack.meeting-notes,Claude Meeting Notes Summarizer,claude,prompt-pack,0.1.0,draft,templates/claude/prompt-packs/claude-prompt-pack-meeting-notes
+tpl.langflow.chatbot.memory-chatbot,Langflow Memory Chatbot,langflow,chatbot,0.1.0,draft,templates/langflow/chatbots/langflow-chatbot-memory-chatbot
 tpl.langflow.chatbot.rag-docs,Langflow RAG Docs Chatbot,langflow,chatbot,0.1.0,draft,templates/langflow/chatbots/langflow-chatbot-rag-docs
+tpl.langflow.chatbot.vector-store-rag,Langflow Vector Store RAG,langflow,chatbot,0.1.0,draft,templates/langflow/chatbots/langflow-chatbot-vector-store-rag
 tpl.langflow.infra-agent.infra-mcp-orchestrator,Langflow Infra MCP Orchestrator,langflow,infra-agent,0.1.0,draft,templates/langflow/infra-agents/langflow-infra-mcp-orchestrator
+tpl.langflow.workflow.financial-report-parser,Langflow Financial Report Parser,langflow,workflow,0.1.0,draft,templates/langflow/workflows/langflow-workflow-financial-report-parser
+tpl.langflow.workflow.research-agent,Langflow Research Agent,langflow,workflow,0.1.0,draft,templates/langflow/workflows/langflow-workflow-research-agent
 tpl.n8n.chatbot.slack-docs,Slack Docs Chatbot (deprecated),n8n,chatbot,0.1.0,deprecated,templates/n8n/chatbots/n8n-chatbot-slack-docs
 tpl.n8n.chatbot.slack-engineering-docs,n8n Slack Engineering Docs Bot,n8n,chatbot,0.1.0,draft,templates/n8n/chatbots/n8n-chatbot-slack-engineering-docs
 tpl.n8n.workflow.cloud-cost-research,n8n Cloud Cost Research Workflow,n8n,workflow,0.1.0,draft,templates/n8n/workflows/n8n-workflow-cloud-cost-research
+tpl.n8n.workflow.email-ai-responder,n8n Email AI Auto-Responder with RAG,n8n,workflow,0.1.0,draft,templates/n8n/workflows/n8n-workflow-email-ai-responder
+tpl.n8n.workflow.meeting-action-items,n8n Meeting Action Items Extractor,n8n,workflow,0.1.0,draft,templates/n8n/workflows/n8n-workflow-meeting-action-items
+tpl.n8n.workflow.pdf-qa,n8n PDF Q&A with Citations,n8n,workflow,0.1.0,draft,templates/n8n/workflows/n8n-workflow-pdf-qa
 tpl.n8n.workflow.pr-documentation-generator,n8n PR Documentation Generator,n8n,workflow,0.1.0,draft,templates/n8n/workflows/n8n-workflow-pr-documentation-generator
+tpl.n8n.workflow.youtube-summarizer,n8n YouTube Video Summarizer,n8n,workflow,0.1.0,draft,templates/n8n/workflows/n8n-workflow-youtube-summarizer
 tpl.others.initial-setup.mac-windows-ai-devops-bootstrap,AI DevOps Bootstrap (deprecated),others,initial-setup,0.1.0,deprecated,templates/others/initial-setup/mac-windows-ai-devops-bootstrap
 tpl.others.initial-setup.ai-devops-bootstrap,AI DevOps Bootstrap (macOS + Windows),others,initial-setup,0.1.0,draft,templates/others/initial-setup/others-initial-setup-ai-devops-bootstrap
 tpl.zapier.workflow.finops-alerting,Zapier FinOps Alerting Blueprint,zapier,workflow,0.1.0,draft,templates/zapier/workflows/zapier-workflow-finops-alerting

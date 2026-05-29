@@ -1,0 +1,42 @@
+schema_version: "1.0.0"
+template_id: "tpl.n8n.workflow.pdf-qa"
+name: "n8n PDF Q&A with Citations"
+slug: "pdf-qa"
+platform: "n8n"
+template_type: "workflow"
+version: "0.1.0"
+status: "draft"
+language: ["en"]
+summary: "Chatbot que carga un PDF desde Google Drive, lo indexa en Pinecone con embeddings de OpenAI, y responde preguntas citando los fragmentos exactos del documento fuente."
+owner:
+  team: "clickit/bench-agentic"
+  maintainers: ["@fen22"]
+tags: ["pdf", "rag", "chatbot", "pinecone", "openai", "citations", "n8n"]
+integrations: ["Google Drive", "Pinecone", "OpenAI"]
+artifacts:
+  entrypoint: "src/workflow.json"
+  readme: "README.md"
+  env_example: ".env.example"
+attribution:
+  source: "enescingoz/awesome-n8n-templates"
+  url: "https://github.com/enescingoz/awesome-n8n-templates"
+  license: "CC BY 4.0"
+  author: "Enes Cingoz"
+secrets:
+  required:
+    - OPENAI_API_KEY
+    - PINECONE_API_KEY
+    - PINECONE_INDEX
+    - GOOGLE_DRIVE_FILE_ID
+  optional: []
+runtime:
+  deployment_models: ["local", "cloud"]
+validation:
+  last_tested_at: null
+  tested_by: null
+  evidence: []
+security:
+  data_classification: "internal"
+  pii_expected: false
+  credentials_embedded: false
+  least_privilege_reviewed: false

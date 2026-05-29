@@ -1,0 +1,39 @@
+schema_version: "1.0.0"
+template_id: "tpl.n8n.workflow.youtube-summarizer"
+name: "n8n YouTube Video Summarizer"
+slug: "youtube-summarizer"
+platform: "n8n"
+template_type: "workflow"
+version: "0.1.0"
+status: "draft"
+language: ["en"]
+summary: "Workflow que recibe una URL de YouTube, descarga la transcripción y genera un resumen ejecutivo con puntos clave usando un LLM."
+owner:
+  team: "clickit/bench-agentic"
+  maintainers: ["@fen22"]
+tags: ["youtube", "summarizer", "transcription", "llm", "n8n"]
+integrations: ["YouTube Transcript API", "OpenAI"]
+artifacts:
+  entrypoint: "src/workflow.json"
+  readme: "README.md"
+  env_example: ".env.example"
+attribution:
+  source: "enescingoz/awesome-n8n-templates"
+  url: "https://github.com/enescingoz/awesome-n8n-templates"
+  license: "CC BY 4.0"
+  author: "Enes Cingoz"
+secrets:
+  required:
+    - OPENAI_API_KEY
+  optional: []
+runtime:
+  deployment_models: ["local", "cloud"]
+validation:
+  last_tested_at: null
+  tested_by: null
+  evidence: []
+security:
+  data_classification: "public"
+  pii_expected: false
+  credentials_embedded: false
+  least_privilege_reviewed: false

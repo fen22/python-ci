@@ -1,0 +1,40 @@
+schema_version: "1.0.0"
+template_id: "tpl.langflow.chatbot.vector-store-rag"
+name: "Langflow Vector Store RAG"
+slug: "vector-store-rag"
+platform: "langflow"
+template_type: "chatbot"
+version: "0.1.0"
+status: "draft"
+language: ["en"]
+summary: "Chatbot RAG completo con vector store configurable (Chroma, FAISS, Pinecone). Flow oficial de Langflow."
+owner:
+  team: "clickit/bench-agentic"
+  maintainers: ["@fen22"]
+tags: ["langflow", "vector-store-rag"]
+integrations: ["Langflow", "OpenAI"]
+artifacts:
+  entrypoint: "src/flow.json"
+  readme: "README.md"
+  env_example: ".env.example"
+attribution:
+  source: "langflow-ai/langflow"
+  url: "https://github.com/langflow-ai/langflow"
+  license: "MIT"
+  author: "Langflow team"
+secrets:
+  required:
+    - OPENAI_API_KEY
+  optional:
+    - ANTHROPIC_API_KEY
+runtime:
+  deployment_models: ["local", "cloud"]
+validation:
+  last_tested_at: null
+  tested_by: null
+  evidence: []
+security:
+  data_classification: "internal"
+  pii_expected: false
+  credentials_embedded: false
+  least_privilege_reviewed: false

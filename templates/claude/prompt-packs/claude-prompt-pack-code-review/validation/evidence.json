@@ -1,0 +1,7 @@
+{
+  "template_id": "tpl.claude.prompt-pack.code-review",
+  "status": "draft",
+  "note": "Prompts diseñados. Fixture con 5 issues intencionales. Smoke tests pendientes.",
+  "tests_run": [],
+  "last_updated": null
+}
